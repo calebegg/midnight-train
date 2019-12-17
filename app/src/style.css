@@ -1,0 +1,423 @@
+/**
+ * @license
+ * Copyright 2019 Google LLC
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file or at https://opensource.org/licenses/MIT.
+ */
+
+:root {
+  /* https://www.colorbox.io/#steps=7#hue_start=229#hue_end=287#hue_curve=easeInQuad#sat_start=10#sat_end=30#sat_curve=easeOutQuad#sat_rate=100#lum_start=100#lum_end=25#lum_curve=easeInOutQuad#minor_steps_map=none */
+  --color-0: #f2e6ff;
+  --color-1: #dfcdf4;
+  --color-2: #bba8d6;
+  --color-3: #8779a2;
+  --color-4: #554e6c;
+  --color-5: #36354b;
+  --color-6: #2d2f40;
+
+  --logo-color: #7756e3;
+
+  --contrast-0: #333;
+  --contrast-1: #333;
+  --contrast-2: #333;
+  --contrast-3: white;
+  --contrast-4: white;
+  --contrast-5: white;
+  --contrast-6: white;
+}
+
+html,
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+li,
+.time-table li > a {
+  padding: 4px 8px;
+}
+
+h1 {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding-top: env(safe-area-inset-top);
+  font-size: 34px;
+  font-weight: 300;
+  line-height: 48px;
+  background: var(--color-6);
+  color: var(--contrast-6);
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 32px;
+  background: var(--color-0);
+  color: var(--contrast-0);
+}
+
+h3 {
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: bold;
+  text-transform: uppercase;
+  background: var(--color-3);
+  color: var(--contrast-3);
+}
+
+html {
+  min-height: calc(
+    100% + env(safe-area-inset-top) + env(safe-area-inset-bottom)
+  );
+}
+
+body,
+main {
+  min-height: 100%;
+}
+
+body {
+  position: relative;
+  font-family: Roboto, sans-serif;
+  line-height: 24px;
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: var(--color-6);
+  color: var(--contrast-6);
+}
+
+p {
+  margin: 0;
+  line-height: 24px;
+  padding: 4px 8px;
+}
+
+nav {
+  position: fixed;
+  z-index: 1;
+  bottom: 0;
+  padding-bottom: env(safe-area-inset-bottom);
+  left: 0;
+  right: 0;
+  background-color: var(--color-4);
+  color: var(--color-3);
+  font-size: 13px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+nav ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  max-width: 400px;
+  margin: auto;
+}
+
+nav ul li {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  padding: 8px;
+  margin: 0 8px;
+  line-height: 1;
+}
+
+main {
+  /* Compensate for height of nav bar */
+  margin-bottom: 50vh;
+}
+
+nav a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  color: inherit;
+  text-align: center;
+  text-decoration: none;
+}
+
+nav a.active {
+  color: white;
+}
+
+nav .svg-inline--fa {
+  font-size: 24px;
+}
+
+.error {
+  background: #a1001e;
+  color: white;
+}
+
+.splash {
+  margin-top: 30%;
+}
+.splash img {
+  margin: auto;
+  width: 50%;
+  display: block;
+  margin-bottom: 10%;
+}
+.splash h1 {
+  text-align: center;
+  font-family: Helvetica;
+  font-weight: bold;
+  border-top: solid black 10px;
+  line-height: 1.2;
+  padding: 0;
+  background: black;
+  padding-bottom: 25px;
+  font-size: 40px;
+}
+.splash h1::before {
+  content: '';
+  display: block;
+  background: white;
+  height: 2px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.row > * {
+  flex: 1 0 0;
+}
+
+ul.time-table li,
+ul.trip li {
+  height: 24px;
+}
+
+/*
+  Background for time table items is the full page width so even if there are
+  missing items on one or the other side, the row spans the page.
+*/
+ul.time-table li::before {
+  content: '';
+  height: 32px;
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  margin-top: -4px;
+}
+
+ul.time-table li::before,
+ul.trip li {
+  background-color: var(--color-4);
+  color: var(--contrast-4);
+}
+
+ul.time-table li:nth-child(2n)::before,
+ul.trip li:nth-child(2n) {
+  background-color: var(--color-5);
+  color: var(--contrast-5);
+}
+
+ul.time-table li {
+  position: relative;
+}
+ul.time-table li > a {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+input.search,
+textarea {
+  width: calc(100% - 16px);
+  display: block;
+  padding: 4px 8px;
+  border: none;
+}
+
+input.search {
+  font-size: 24px;
+}
+
+textarea {
+  height: 500px;
+}
+
+.bullet {
+  display: inline-block;
+  background-color: #888;
+  color: white;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+.bullet[class$='X'] {
+  border-radius: 0;
+  transform: rotate(45deg);
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  margin: 2px;
+}
+
+.bullet[class$='X'] > span {
+  display: block;
+  transform: rotate(-45deg);
+}
+
+.bullet.sN,
+.bullet.sQ,
+.bullet.sR,
+.bullet.sW {
+  color: black;
+  background-color: #fccc0a;
+}
+
+.bullet.sB,
+.bullet.sD,
+.bullet.sF,
+.bullet.sFX,
+.bullet.sM {
+  background-color: #ff6319;
+}
+
+.bullet.s1,
+.bullet.s2,
+.bullet.s3 {
+  background-color: #ee352e;
+}
+
+.bullet.s4,
+.bullet.s5,
+.bullet.s5X,
+.bullet.s6,
+.bullet.s6X {
+  background-color: #00933c;
+}
+
+.bullet.s7,
+.bullet.s7X {
+  background-color: #b933ad;
+}
+
+.bullet.sA,
+.bullet.sC,
+.bullet.sE {
+  background-color: #0039a6;
+}
+
+.bullet.sS {
+  background-color: #808183;
+}
+
+.bullet.sL {
+  background-color: #a7a9ac;
+}
+
+.bullet.sG {
+  background-color: #6cbe45;
+}
+
+.bullet.sJ,
+.bullet.sZ {
+  background-color: #996633;
+}
+
+.station:not(:last-child) {
+  margin-bottom: 16px;
+}
+
+.station h2 {
+  position: relative;
+  line-height: 24px;
+  padding: 8px;
+}
+
+.station.with-walk-time h2 {
+  padding-left: 40px;
+}
+
+.borough {
+  display: block;
+  line-height: 16px;
+  font-weight: 400;
+  font-size: 11px;
+  margin: 0 0 0 1px;
+  text-transform: uppercase;
+}
+
+.favorite-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  line-height: 56px;
+  padding: 0 8px;
+}
+
+.favorite-toggle input {
+  display: none;
+}
+
+.favorite-toggle svg path {
+  stroke-width: 30;
+}
+
+.favorite-toggle input:not(:checked) + svg path {
+  stroke: var(--color-2);
+  fill: var(--color-1);
+}
+
+.favorite-toggle input:checked + svg path {
+  stroke: #e6b914;
+  fill: #ffd63f;
+}
+
+.walk-time {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  text-align: center;
+  width: 24px;
+  font-size: 20px;
+}
+
+.walk-time div {
+  line-height: 16px;
+  font-weight: 400;
+  font-size: 11px;
+}
+
+@import url('./trip.css');

@@ -1,0 +1,124 @@
+/**
+ * @license
+ * Copyright 2019 Google LLC
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file or at https://opensource.org/licenses/MIT.
+ */
+
+ul.trip {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul.trip li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+ul.trip li.selected {
+  font-weight: bold;
+}
+
+ul.trip li time {
+  width: 70px;
+  text-align: right;
+}
+
+ul.trip li .connector {
+  position: relative;
+  display: inline-block;
+  width: 4px;
+  height: 32px;
+  background: currentColor;
+  margin: 0 16px;
+}
+
+ul.trip li:first-child .connector {
+  height: 16px;
+  margin-top: 16px;
+}
+
+ul.trip li:last-child .connector {
+  height: 16px;
+  margin-top: -16px;
+}
+
+ul.trip li .connector::before {
+  content: '';
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: currentColor;
+  position: absolute;
+  left: -4px;
+  top: calc(50% - 5px);
+}
+
+ul.trip li:first-child .connector::before {
+  top: -5px;
+}
+
+ul.trip li:last-child .connector::before {
+  top: calc(50% + 3px);
+}
+
+ul.trip.sN .connector,
+ul.trip.sQ .connector,
+ul.trip.sR .connector,
+ul.trip.sW .connector {
+  color: #fccc0a;
+}
+
+ul.trip.sB .connector,
+ul.trip.sD .connector,
+ul.trip.sF .connector,
+ul.trip.sFX .connector,
+ul.trip.sM .connector {
+  color: #ff6319;
+}
+
+ul.trip.s1 .connector,
+ul.trip.s2 .connector,
+ul.trip.s3 .connector {
+  color: #ee352e;
+}
+
+ul.trip.s4 .connector,
+ul.trip.s5 .connector,
+ul.trip.s5X .connector,
+ul.trip.s6 .connector,
+ul.trip.s6X .connector {
+  color: #00933c;
+}
+
+ul.trip.s7 .connector,
+ul.trip.s7X .connector {
+  color: #b933ad;
+}
+
+ul.trip.sA .connector,
+ul.trip.sC .connector,
+ul.trip.sE .connector {
+  color: #0039a6;
+}
+
+ul.trip.sS .connector {
+  color: #808183;
+}
+
+ul.trip.sL .connector {
+  color: #a7a9ac;
+}
+
+ul.trip.sG .connector {
+  color: #6cbe45;
+}
+
+ul.trip.sJ .connector,
+ul.trip.sZ .connector {
+  color: #996633;
+}

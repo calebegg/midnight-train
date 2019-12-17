@@ -1,0 +1,27 @@
+{
+  "name": "midnight-train",
+  "scripts": {
+    "serve": "concurrently \"cd functions; tsc --watch\" \"firebase serve -o 0.0.0.0\" \"cd app; parcel serve index.html\"",
+    "build:app": "cd app; parcel build --experimental-scope-hoisting index.html",
+    "build:functions": "cd functions; tsc",
+    "build": "concurrently \"npm run build:app\" \"npm run build:functions\"",
+    "deploy:app": "npm run lint && npm run build && firebase deploy --only hosting",
+    "deploy:functions": "npm run lint && firebase deploy --only functions",
+    "deploy": "npm run lint && npm run build && firebase deploy",
+    "lint": "eslint . --max-warnings=0 --ext .ts,.tsx",
+    "postinstall": "cd functions; npm install; cd ../app; npm install"
+  },
+  "devDependencies": {
+    "@types/csv-parse": "^1.2.2",
+    "@typescript-eslint/eslint-plugin": "^2.9.0",
+    "@typescript-eslint/parser": "^2.9.0",
+    "concurrently": "^5.0.0",
+    "csv-parse": "^4.8.2",
+    "eslint": "^6.7.1",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.17.0",
+    "firebase-tools": "^7.8.1",
+    "parcel": "^1.12.4",
+    "typescript": "^3.7.2"
+  }
+}

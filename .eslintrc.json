@@ -1,0 +1,28 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2019,
+    "sourceType": "module"
+  },
+  "ignorePatterns": [
+    "node_modules/",
+    "functions/node_modules/",
+    "app/node_modules/"
+  ],
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "plugins": ["@typescript-eslint", "prettier", "react"],
+  "rules": {
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      { "argsIgnorePattern": "^unused" }
+    ],
+    "react/jsx-uses-vars": "warn",
+    "react/jsx-uses-react": "warn",
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "no-alert": "warn",
+    "no-debugger": "warn"
+  }
+}
