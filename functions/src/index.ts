@@ -6,6 +6,14 @@
  * found in the LICENSE file or at https://opensource.org/licenses/MIT.
  */
 
+import admin from 'firebase-admin';
+
+admin.initializeApp({
+  credential: admin.credential.cert(require('../serviceAccountKey.json')),
+  storageBucket: 'midnight-train.appspot.com',
+});
+
 export { arrivals } from './arrivals';
 export { walktimes } from './walktimes';
 export { trip } from './trip';
+export { fetch } from './fetch';

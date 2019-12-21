@@ -7,6 +7,7 @@
  */
 
 import { transit_realtime } from 'gtfs-realtime-bindings';
+import admin from 'firebase-admin';
 import request from 'request-promise-native';
 import { config } from 'firebase-functions';
 
@@ -14,7 +15,7 @@ const { FeedMessage } = transit_realtime;
 
 const API_KEY = config().api_keys.gtfs_realtime;
 
-const FEEDS = [
+export const FEEDS = [
   { id: '1', services: '123456S' },
   { id: '26', services: 'ACEHS' },
   { id: '16', services: 'NQRW' },
@@ -44,31 +45,39 @@ export async function fetchGtfs() {
   feedCache = {};
   failures = [];
 
-  const entities = (await Promise.all(
-    FEEDS.map(async ({ id: feedId, services }) => {
-      let attempts = 3;
-      while (true) {
+  const entities = (
+    await Promise.all(
+      FEEDS.map(async ({ id: feedId, services }) => {
+        let gtfs;
         try {
-          const gtfs = await request({
+          gtfs = await request({
             url: `http://datamine.mta.info/mta_esi.php?key=${API_KEY}&feed_id=${feedId}`,
             encoding: null,
           });
-          return {
-            status: 'fulfilled',
-            value: FeedMessage.decode(gtfs).entity,
-          };
         } catch {
-          console.warn('Request failed, retrying');
-          await new Promise(r => {
-            setTimeout(r, 50);
-          });
-          attempts--;
-          if (attempts > 0) continue;
-          return { status: 'rejected', reason: new Error(services) };
+          try {
+            const file = admin
+              .storage()
+              .bucket()
+              .file(`feed_${feedId}`);
+            console.warn(
+              `Fetch failed, using cache updated ${
+                (await file.getMetadata())[0].updated
+              }`,
+            );
+            gtfs = (await file.download())[0];
+          } catch (e) {
+            console.warn('Cache failed', e);
+            return { status: 'rejected', reason: new Error(services) };
+          }
         }
-      }
-    }),
-  ))
+        return {
+          status: 'fulfilled',
+          value: FeedMessage.decode(gtfs).entity,
+        };
+      }),
+    )
+  )
     .map(result => {
       if (result.status === 'fulfilled') {
         return result.value;
