@@ -9,7 +9,7 @@
 import { RouteComponentProps, Router } from '@reach/router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 // @ts-ignore
-import icon from '../icon_android_512.png';
+import icon from '../icon_512.png';
 import { ArrivalsContext, FavoritesContext } from './context';
 import { ErrorBoundary } from './ErrorBoundary';
 import { Favorites } from './Favorites';
@@ -107,7 +107,7 @@ export function App() {
   );
 }
 
-function Splash({  }: RouteComponentProps) {
+function Splash({}: RouteComponentProps) {
   return (
     <div className="splash">
       <img src={icon} />
