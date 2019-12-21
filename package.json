@@ -13,15 +13,15 @@
   },
   "devDependencies": {
     "@types/csv-parse": "^1.2.2",
-    "@typescript-eslint/eslint-plugin": "^2.9.0",
-    "@typescript-eslint/parser": "^2.9.0",
-    "concurrently": "^5.0.0",
+    "@typescript-eslint/eslint-plugin": "^2.12.0",
+    "@typescript-eslint/parser": "^2.12.0",
+    "concurrently": "^5.0.2",
     "csv-parse": "^4.8.2",
-    "eslint": "^6.7.1",
-    "eslint-plugin-prettier": "^3.1.1",
+    "eslint": "^6.8.0",
+    "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.17.0",
-    "firebase-tools": "^7.8.1",
+    "firebase-tools": "^7.11.0",
     "parcel": "^1.12.4",
-    "typescript": "^3.7.2"
+    "typescript": "^3.7.4"
   }
 }
