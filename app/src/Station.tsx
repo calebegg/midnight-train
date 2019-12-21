@@ -14,12 +14,19 @@ import { faStar, faWalking } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from '@reach/router';
 
-const { stopInfo } = generated;
+const stopInfo: {
+  [k: string]: {
+    name: string;
+    latitude: number;
+    longitude: number;
+    borough: string;
+  };
+} = generated.stopInfo;
 
 export function Station({ id, walkTime }: { id: string; walkTime?: number }) {
   const { favorites, toggleFavorite } = useContext(FavoritesContext);
 
-  const station = (stopInfo as any)[id];
+  const station = stopInfo[id];
   const arrivalsData = useContext(ArrivalsContext);
 
   const data = arrivalsData
@@ -128,14 +135,11 @@ function ArrivalList({
         <Bullet id={service} />{' '}
         {currentTimes
           .map(t => <TimeLabel key={t} timestamp={t} />)
-          .reduce(
-            (acc, v) => {
-              if (acc.length > 0) acc.push(', ');
-              acc.push(v);
-              return acc;
-            },
-            [] as ReactNode[],
-          )}
+          .reduce((acc, v) => {
+            if (acc.length > 0) acc.push(', ');
+            acc.push(v);
+            return acc;
+          }, [] as ReactNode[])}
       </Link>
     </li>
   );
