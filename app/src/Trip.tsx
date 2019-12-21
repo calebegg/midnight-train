@@ -42,9 +42,9 @@ export function Trip({
 
   async function loadTripData() {
     try {
-      const response: TripDataResponse[] = await (await fetch(
-        `/_/trip/${service}/${direction}`,
-      )).json();
+      const response: TripDataResponse[] = await (
+        await fetch(`/_/trip/${service}/${direction}`)
+      ).json();
       setData(response);
       if (index === -1) {
         const firstMatchIndex = response.findIndex(t =>
@@ -95,20 +95,22 @@ export function Trip({
       </button>
       <ul className={`trip s${service}`}>
         {data && index >= 0 ? (
-          data[index].stops.map(s => (
-            <li
-              key={s.stopId}
-              className={s.stopId === stopId ? 'selected' : ''}
-            >
-              <time>
-                {new Date(s.time).toLocaleTimeString(undefined, {
-                  timeStyle: 'short',
-                })}
-              </time>
-              <span className="connector"></span>
-              <span>{stopInfo[s.stopId as keyof typeof stopInfo].name}</span>
-            </li>
-          ))
+          data[index].stops
+            .filter(s => s.stopId in stopInfo)
+            .map(s => (
+              <li
+                key={s.stopId}
+                className={s.stopId === stopId ? 'selected' : ''}
+              >
+                <time>
+                  {new Date(s.time).toLocaleTimeString(undefined, {
+                    timeStyle: 'short',
+                  })}
+                </time>
+                <span className="connector"></span>
+                <span>{stopInfo[s.stopId as keyof typeof stopInfo].name}</span>
+              </li>
+            ))
         ) : (
           <p>Loading data</p>
         )}
