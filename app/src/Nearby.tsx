@@ -35,25 +35,27 @@ export function Nearby({
         return (Math.round(coord / 0.0005) * 0.0005).toFixed(4);
       }
 
-      const data = await (await fetch(
-        '/_/walktimes?' +
-          new URLSearchParams([
-            [
-              'origin',
+      const data = await (
+        await fetch(
+          '/_/walktimes?' +
+            new URLSearchParams([
               [
-                round(position.coords.latitude),
-                round(position.coords.longitude),
-              ].join(','),
-            ],
-            ...nearestStops.map(id => {
-              const stop = stopInfo[id as keyof typeof stopInfo];
-              return [
-                'destination[]',
-                [stop.latitude, stop.longitude].join(','),
-              ];
-            }),
-          ]),
-      )).json();
+                'origin',
+                [
+                  round(position.coords.latitude),
+                  round(position.coords.longitude),
+                ].join(','),
+              ],
+              ...nearestStops.map(id => {
+                const stop = stopInfo[id as keyof typeof stopInfo];
+                return [
+                  'destination[]',
+                  [stop.latitude, stop.longitude].join(','),
+                ];
+              }),
+            ]),
+        )
+      ).json();
       setWalkTimes(
         new Map((data as number[]).map((t, i) => [nearestStops[i], t])),
       );
