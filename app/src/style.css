@@ -126,7 +126,6 @@ ul {
 
 a {
   color: inherit;
-  text-decoration: inherit;
 }
 
 nav ul {
@@ -256,6 +255,7 @@ ul.time-table li > a {
   right: 0;
   bottom: 0;
   left: 0;
+  text-decoration: none;
 }
 
 input.search,
@@ -410,11 +410,14 @@ textarea {
 
 .walk-time {
   position: absolute;
-  left: 8px;
-  top: 8px;
+  display: block;
+  left: 0;
+  top: 0;
+  padding: 8px;
   text-align: center;
   width: 24px;
   font-size: 20px;
+  text-decoration: none;
 }
 
 .walk-time div {

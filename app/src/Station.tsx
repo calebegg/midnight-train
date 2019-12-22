@@ -41,10 +41,16 @@ export function Station({ id, walkTime }: { id: string; walkTime?: number }) {
         <span className={'borough ' + station.borough}>{station.borough}</span>
         {station.name}
         {walkTime ? (
-          <div className="walk-time">
+          <a
+            href={
+              'https://www.google.com/maps/?q=' +
+              `${station.latitude},${station.longitude}`
+            }
+            className="walk-time"
+          >
             <FontAwesomeIcon icon={faWalking} />
             <div>{Math.round(walkTime / 60)}m</div>
-          </div>
+          </a>
         ) : null}
         <label className="favorite-toggle">
           <input

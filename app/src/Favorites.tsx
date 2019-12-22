@@ -6,7 +6,7 @@
  * found in the LICENSE file or at https://opensource.org/licenses/MIT.
  */
 
-import { RouteComponentProps } from '@reach/router';
+import { RouteComponentProps, Link } from '@reach/router';
 import React, { useContext } from 'react';
 import { FavoritesContext } from './context';
 import { ErrorBoundary } from './ErrorBoundary';
@@ -21,7 +21,14 @@ export function Favorites({
   return (
     <ErrorBoundary>
       <h1>Favorites</h1>
-      {favorites.size === 0 ? <p>You don't have any favorites yet</p> : ''}
+      {favorites.size === 0 ? (
+        <p>
+          You don't have any favorites yet.{' '}
+          <Link to="/search">Search to find stations to add</Link>.
+        </p>
+      ) : (
+        ''
+      )}
       {[...favorites].sort(byDistance(position)).map(id => (
         <Station key={id} id={id} />
       ))}
