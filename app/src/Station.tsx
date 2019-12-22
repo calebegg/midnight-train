@@ -20,6 +20,8 @@ const stopInfo: {
     latitude: number;
     longitude: number;
     borough: string;
+    headNorth?: string;
+    headSouth?: string;
   };
 } = generated.stopInfo;
 
@@ -57,11 +59,11 @@ export function Station({ id, walkTime }: { id: string; walkTime?: number }) {
       </h2>
       <div className="row">
         <div className="north">
-          <h3>{id.startsWith('L') ? 'Manhattan' : 'North'}</h3>
+          <h3>{station.headNorth || 'No service'}</h3>
           <TimeTable data={data.N} direction="N" stopId={id} />
         </div>
         <div className="south">
-          <h3>{id.startsWith('L') ? 'Brooklyn' : 'South'}</h3>
+          <h3>{station.headSouth || 'No service'}</h3>
           <TimeTable data={data.S} direction="S" stopId={id} />
         </div>
       </div>

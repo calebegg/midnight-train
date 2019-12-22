@@ -74,6 +74,9 @@ h3 {
   text-transform: uppercase;
   background: var(--color-3);
   color: var(--contrast-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 html {
@@ -209,7 +212,7 @@ nav .svg-inline--fa {
 }
 
 .row > * {
-  flex: 1 0 0;
+  width: 50%;
 }
 
 ul.time-table li,
