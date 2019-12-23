@@ -48,12 +48,13 @@ export async function fetchGtfs() {
   const entities = (
     await Promise.all(
       FEEDS.map(async ({ id: feedId, services }) => {
-        let gtfs;
+        let value;
         try {
-          gtfs = await request({
+          let gtfs = await request({
             url: `http://datamine.mta.info/mta_esi.php?key=${API_KEY}&feed_id=${feedId}`,
             encoding: null,
           });
+          value = FeedMessage.decode(gtfs).entity;
         } catch {
           try {
             const file = admin
@@ -65,7 +66,8 @@ export async function fetchGtfs() {
                 (await file.getMetadata())[0].updated
               }`,
             );
-            gtfs = (await file.download())[0];
+            let gtfs = (await file.download())[0];
+            value = FeedMessage.decode(gtfs).entity;
           } catch (e) {
             console.warn('Cache failed', e);
             return { status: 'rejected', reason: new Error(services) };
@@ -73,7 +75,7 @@ export async function fetchGtfs() {
         }
         return {
           status: 'fulfilled',
-          value: FeedMessage.decode(gtfs).entity,
+          value,
         };
       }),
     )
