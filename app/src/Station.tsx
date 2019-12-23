@@ -10,7 +10,8 @@ import React, { memo, ReactNode, useContext, useEffect, useState } from 'react';
 import { ArrivalsContext, FavoritesContext } from './context';
 import generated from './generated/data.json';
 import { TimesData } from './types';
-import { faStar, faWalking } from '@fortawesome/free-solid-svg-icons';
+import { faStar, faWalking, faRandom } from '@fortawesome/free-solid-svg-icons';
+import { faAccessibleIcon } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from '@reach/router';
 
@@ -20,10 +21,20 @@ const stopInfo: {
     latitude: number;
     longitude: number;
     borough: string;
+    crossover: boolean;
+    ada: boolean;
     headNorth?: string;
     headSouth?: string;
   };
 } = generated.stopInfo;
+
+const BOROUGH_NAMES = {
+  'Q': 'Queens',
+  'M': 'Manhattan',
+  'Bx': 'Bronx',
+  'Bk': 'Brooklyn',
+  'SI': 'Staten Island',
+};
 
 export function Station({ id, walkTime }: { id: string; walkTime?: number }) {
   const { favorites, toggleFavorite } = useContext(FavoritesContext);
@@ -38,8 +49,14 @@ export function Station({ id, walkTime }: { id: string; walkTime?: number }) {
   return (
     <section className={`station${walkTime ? ' with-walk-time' : ''}`}>
       <h2>
-        <span className={'borough ' + station.borough}>{station.borough}</span>
+        <span className="borough">
+          {BOROUGH_NAMES[station.borough as keyof typeof BOROUGH_NAMES]}
+        </span>
         {station.name}
+        <span className="metadata">
+          {station.crossover ? <FontAwesomeIcon icon={faRandom} /> : ''}
+          {station.ada ? <FontAwesomeIcon icon={faAccessibleIcon} /> : ''}
+        </span>
         {walkTime ? (
           <a
             href={

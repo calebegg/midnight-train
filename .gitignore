@@ -7,7 +7,7 @@ app/src/generated
 
 # Dependencies
 node_modules/
-google_transit/
+data/
 
 # Logs
 logs

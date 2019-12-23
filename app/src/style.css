@@ -381,6 +381,17 @@ textarea {
   text-transform: uppercase;
 }
 
+.metadata {
+  margin: 0 4px;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 12px;
+  vertical-align: top;
+}
+
+.metadata svg {
+  margin: 0 8px;
+}
+
 .favorite-toggle {
   position: absolute;
   top: 0;

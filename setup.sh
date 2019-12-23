@@ -11,9 +11,12 @@ npm i
 cd functions/ && npm i && cd ..
 cd app/ && npm i && cd ..
 
-wget http://web.mta.info/developers/data/nyct/subway/google_transit.zip
-unzip google_transit.zip -d google_transit
-rm google_transit.zip
+mkdir data
+wget -P data http://web.mta.info/developers/data/nyct/subway/google_transit.zip
+wget -P data http://web.mta.info/developers/data/nyct/subway/StationEntrances.csv
+wget -P data http://web.mta.info/developers/data/nyct/subway/Stations.csv
+unzip data/google_transit.zip -d data/google_transit
+rm data/google_transit.zip
 
 mkdir app/src/generated
 node scripts/generate_data.js > app/src/generated/data.json
