@@ -20,6 +20,11 @@ workbox.routing.registerRoute(
 );
 
 workbox.routing.registerRoute(
+  /\/_\/walktimes/,
+  new workbox.strategies.CacheFirst(),
+);
+
+workbox.routing.registerRoute(
   /\/_\//,
   new workbox.strategies.NetworkFirst({
     cacheName: 'feed-caches',

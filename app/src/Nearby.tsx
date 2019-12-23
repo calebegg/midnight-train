@@ -14,6 +14,8 @@ import { Station } from './Station';
 
 const { stopInfo } = generated;
 
+const walkTimesCache = new Map<string, any>();
+
 export function Nearby({
   position,
 }: { position: Position | null } & RouteComponentProps) {
@@ -35,27 +37,30 @@ export function Nearby({
         return (Math.round(coord / 0.0005) * 0.0005).toFixed(4);
       }
 
-      const data = await (
-        await fetch(
-          '/_/walktimes?' +
-            new URLSearchParams([
-              [
-                'origin',
-                [
-                  round(position.coords.latitude),
-                  round(position.coords.longitude),
-                ].join(','),
-              ],
-              ...nearestStops.map(id => {
-                const stop = stopInfo[id as keyof typeof stopInfo];
-                return [
-                  'destination[]',
-                  [stop.latitude, stop.longitude].join(','),
-                ];
-              }),
-            ]),
-        )
-      ).json();
+      const originCoords = [
+        round(position.coords.latitude),
+        round(position.coords.longitude),
+      ].join(',');
+
+      const data =
+        walkTimesCache.get(originCoords) ??
+        (await (
+          await fetch(
+            '/_/walktimes?' +
+              new URLSearchParams([
+                ['origin', originCoords],
+                ...nearestStops.map(id => {
+                  const stop = stopInfo[id as keyof typeof stopInfo];
+                  return [
+                    'destination[]',
+                    [stop.latitude, stop.longitude].join(','),
+                  ];
+                }),
+              ]),
+          )
+        ).json());
+
+      walkTimesCache.set(originCoords, data);
       setWalkTimes(
         new Map((data as number[]).map((t, i) => [nearestStops[i], t])),
       );
