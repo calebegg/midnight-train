@@ -97,6 +97,14 @@ export function App() {
     localStorage.setItem('favorites', JSON.stringify([...favorites]));
   }, [favorites]);
 
+  useEffect(() => {
+    return globalHistory.listen(({ action }) => {
+      if (action === 'PUSH' && document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
+    });
+  });
+
   return (
     <ErrorBoundary>
       <Nav />
