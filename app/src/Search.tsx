@@ -11,6 +11,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { ErrorBoundary } from './ErrorBoundary';
 import generated from './generated/data.json';
 import { Station } from './Station';
+import { PageHeader } from './PageHeader';
 
 const { stopInfo } = generated;
 
@@ -40,7 +41,7 @@ export function Search({ navigate, location }: RouteComponentProps) {
 
   return (
     <ErrorBoundary>
-      <h1>Search</h1>
+      <PageHeader title="Search" />
       <input
         autoFocus={true}
         className="search"

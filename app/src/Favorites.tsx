@@ -12,6 +12,7 @@ import { FavoritesContext } from './context';
 import { ErrorBoundary } from './ErrorBoundary';
 import { byDistance } from './Nearby';
 import { Station } from './Station';
+import { PageHeader } from './PageHeader';
 
 export function Favorites({
   position,
@@ -20,7 +21,7 @@ export function Favorites({
 
   return (
     <ErrorBoundary>
-      <h1>Favorites</h1>
+      <PageHeader title="Favorites" />
       {favorites.size === 0 ? (
         <p>
           You don't have any favorites yet.{' '}

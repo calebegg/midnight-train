@@ -11,6 +11,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { ErrorBoundary } from './ErrorBoundary';
 import generated from './generated/data.json';
 import { Station } from './Station';
+import { PageHeader } from './PageHeader';
 
 const { stopInfo } = generated;
 
@@ -69,7 +70,7 @@ export function Nearby({
 
   return (
     <ErrorBoundary>
-      <h1>Nearby</h1>
+      <PageHeader title="Nearby" />
       {!position ? <p>Locating you</p> : ''}
       {nearestStops.map(id => (
         <Station key={id} id={id} walkTime={walkTimes.get(id)} />
