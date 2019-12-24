@@ -7,11 +7,10 @@
  */
 
 import { RouteComponentProps } from '@reach/router';
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ErrorBoundary } from './ErrorBoundary';
 import generated from './generated/data.json';
 import { Station } from './Station';
-import { PageHeader } from './PageHeader';
 
 const { stopInfo } = generated;
 

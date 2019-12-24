@@ -6,13 +6,12 @@
  * found in the LICENSE file or at https://opensource.org/licenses/MIT.
  */
 
-import { RouteComponentProps, Link } from '@reach/router';
+import { Link, RouteComponentProps } from '@reach/router';
 import React, { useContext } from 'react';
 import { FavoritesContext } from './context';
 import { ErrorBoundary } from './ErrorBoundary';
 import { byDistance } from './Nearby';
 import { Station } from './Station';
-import { PageHeader } from './PageHeader';
 
 export function Favorites({
   position,

@@ -42,7 +42,7 @@ export function App() {
 
   useEffect(() => {
     if (loadingStatus !== LoadingStatus.LOADING) return;
-    let abort = new AbortController();
+    const abort = new AbortController();
     (async () => {
       try {
         const response = await (
