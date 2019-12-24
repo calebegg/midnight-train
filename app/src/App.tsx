@@ -26,19 +26,21 @@ export enum LoadingStatus {
 }
 
 export function App() {
-  const [position, setPosition] = useState<Position | null>(null);
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(l => {
-      setPosition(l);
-    });
-  }, []);
-
-  const [data, setData] = useState<ArrivalsResponse | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loadingStatus, setLoadingStatus] = useState<LoadingStatus>(
     LoadingStatus.LOADING,
   );
+
+  const [position, setPosition] = useState<Position | null>(null);
+
+  useEffect(() => {
+    if (loadingStatus !== LoadingStatus.LOADING) return;
+    navigator.geolocation.getCurrentPosition(l => {
+      setPosition(l);
+    });
+  }, [loadingStatus]);
+
+  const [data, setData] = useState<ArrivalsResponse | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (loadingStatus !== LoadingStatus.LOADING) return;
