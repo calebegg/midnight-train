@@ -44,7 +44,9 @@ export function App() {
 
   useEffect(() => {
     loadArrivalsData();
-    const intervalId = setInterval(loadArrivalsData, 60_000);
+    const intervalId = setInterval(() => {
+      loadArrivalsData();
+    }, 60_000);
     return () => {
       clearInterval(intervalId);
     };

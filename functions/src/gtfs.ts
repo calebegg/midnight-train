@@ -50,7 +50,7 @@ export async function fetchGtfs() {
       FEEDS.map(async ({ id: feedId, services }) => {
         let value;
         try {
-          let gtfs = await request({
+          const gtfs = await request({
             url: `http://datamine.mta.info/mta_esi.php?key=${API_KEY}&feed_id=${feedId}`,
             encoding: null,
           });
@@ -66,7 +66,7 @@ export async function fetchGtfs() {
                 (await file.getMetadata())[0].updated
               }`,
             );
-            let gtfs = (await file.download())[0];
+            const gtfs = (await file.download())[0];
             value = FeedMessage.decode(gtfs).entity;
           } catch (e) {
             console.warn('Cache failed', e);

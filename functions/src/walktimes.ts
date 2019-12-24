@@ -16,6 +16,7 @@ const client = createClient({
 
 const ONE_YEAR = 60 * 60 * 24 * 365;
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const walktimes = https.onRequest(async (req, res) => {
   const { json } = await client
     .distanceMatrix({

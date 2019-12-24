@@ -2,18 +2,21 @@
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2019,
-    "sourceType": "module"
+    "sourceType": "module",
+    "project": "./tsconfig.json"
   },
   "ignorePatterns": [
     "node_modules/",
     "functions/node_modules/",
-    "app/node_modules/"
+    "functions/lib/",
+    "app/node_modules/",
+    "app/dist/"
   ],
   "env": {
     "node": true,
     "es6": true
   },
-  "plugins": ["@typescript-eslint", "prettier", "react"],
+  "plugins": ["@typescript-eslint", "prettier", "react", "header"],
   "rules": {
     "@typescript-eslint/no-unused-vars": [
       "warn",
@@ -21,8 +24,32 @@
     ],
     "react/jsx-uses-vars": "warn",
     "react/jsx-uses-react": "warn",
+    "prettier/prettier": "warn",
     "no-console": ["warn", { "allow": ["warn", "error"] }],
     "no-alert": "warn",
-    "no-debugger": "warn"
+    "no-debugger": "warn",
+    "no-var": "warn",
+    "prefer-const": "warn",
+    "prefer-rest-params": "warn",
+    "prefer-spread": "warn",
+    "@typescript-eslint/await-thenable": "warn",
+    "@typescript-eslint/no-for-in-array": "warn",
+    "@typescript-eslint/no-misused-promises": "warn",
+    "@typescript-eslint/no-unnecessary-type-assertion": "warn",
+    "@typescript-eslint/prefer-includes": "warn",
+    "@typescript-eslint/prefer-string-starts-ends-with": "warn",
+    "header/header": [
+      "warn",
+      "block",
+      [
+        "*",
+        " * @license",
+        " * Copyright 2019 Google LLC",
+        " *",
+        " * Use of this source code is governed by an MIT-style license that can be",
+        " * found in the LICENSE file or at https://opensource.org/licenses/MIT.",
+        " "
+      ]
+    ]
   }
 }

@@ -64,7 +64,9 @@ export function Trip({
 
   useEffect(() => {
     loadTripData();
-    const intervalId = setInterval(loadTripData, 60_000);
+    const intervalId = setInterval(() => {
+      loadTripData();
+    }, 60_000);
     return () => {
       clearInterval(intervalId);
     };

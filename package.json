@@ -8,7 +8,7 @@
     "deploy:app": "npm run lint && npm run build && firebase deploy --only hosting",
     "deploy:functions": "npm run lint && firebase deploy --only functions",
     "deploy": "npm run lint && npm run build && firebase deploy",
-    "lint": "eslint . --max-warnings=0 --ext .ts,.tsx",
+    "lint": "eslint . --max-warnings=0 --ext .ts,.tsx,.js",
     "postinstall": "cd functions; npm install; cd ../app; npm install"
   },
   "devDependencies": {
@@ -23,6 +23,10 @@
     "eslint-plugin-react": "^7.17.0",
     "firebase-tools": "^7.11.0",
     "parcel": "^1.12.4",
+    "prettier": "^1.19.1",
     "typescript": "^3.7.4"
+  },
+  "dependencies": {
+    "eslint-plugin-header": "^3.0.0"
   }
 }

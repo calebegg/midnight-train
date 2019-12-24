@@ -6,4 +6,4 @@
  * found in the LICENSE file or at https://opensource.org/licenses/MIT.
  */
 
- declare module 'gtfs-realtime-bindings';
+declare module 'gtfs-realtime-bindings';

@@ -9,6 +9,7 @@
 import { fetchGtfs } from './gtfs';
 import { https } from 'firebase-functions';
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const trip = https.onRequest(async (req, res) => {
   const [service, direction] = req.path.substring('/_/trip/'.length).split('/');
   const { data } = await fetchGtfs();

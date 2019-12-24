@@ -20,7 +20,7 @@ export const fetch = pubsub.schedule('every 2 minutes').onRun(async () => {
   await Promise.all(
     FEEDS.map(async ({ id: feedId }) => {
       try {
-        let data = await request({
+        const data = await request({
           url: `http://datamine.mta.info/mta_esi.php?key=${API_KEY}&feed_id=${feedId}`,
           encoding: null,
         });

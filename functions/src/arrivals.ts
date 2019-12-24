@@ -17,6 +17,7 @@ interface Arrival {
   direction: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 export const arrivals = https.onRequest(async (req, res) => {
   const byStop = new Map<string, Arrival[]>();
 
@@ -46,7 +47,7 @@ export const arrivals = https.onRequest(async (req, res) => {
 
       arrivalsJson[direction] = {};
       for (const service of services) {
-        let times = arrivalData
+        const times = arrivalData
           .filter(a => a.direction === direction && a.service === service)
           .sort((a, b) => a.time - b.time);
         // Sometimes duplicate arrival times appear in the data.

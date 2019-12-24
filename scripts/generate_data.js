@@ -64,4 +64,5 @@ for (const stop of stops) {
   };
 }
 
+// eslint-disable-next-line no-console
 console.log(JSON.stringify({ stopInfo }, null, 2));

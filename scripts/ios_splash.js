@@ -24,12 +24,19 @@ const SIZES = [
   for (const size of SIZES) {
     const [horiz, vert, scale] = size.split(/[@x]/).map(v => +v);
     for (const orientation of ['portrait']) {
-      let [width, height] =
+      const [width, height] =
         orientation === 'portrait' ? [horiz, vert] : [vert, horiz];
-      await page.setViewport({ width, height, deviceScaleFactor: scale });
+      await page.setViewport({
+        width,
+        height,
+        deviceScaleFactor: scale,
+      });
       await page.goto('http://localhost:5000/splash');
       const filename = `splash-${width * scale}x${height * scale}.png`;
-      await page.screenshot({ path: `assets/${filename}` });
+      await page.screenshot({
+        path: `assets/${filename}`,
+      });
+      // eslint-disable-next-line no-console
       console.log(`<link rel="apple-touch-startup-image"
       media="screen and (device-width: ${horiz}px) and (device-height: ${vert}px) and (-webkit-device-pixel-ratio: ${scale}) and (orientation: ${orientation})"
       href="${filename}"

@@ -12,6 +12,6 @@ import { App } from './App';
 
 navigator.serviceWorker.register('../service-worker.ts', { scope: '/' });
 
-render(<App />, document.querySelector('main')!);
+render(<App />, document.querySelector('main'));
 
 if (module && module.hot) module.hot.accept();
