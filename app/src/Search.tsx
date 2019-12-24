@@ -41,7 +41,6 @@ export function Search({ navigate, location }: RouteComponentProps) {
 
   return (
     <ErrorBoundary>
-      <PageHeader title="Search" />
       <input
         autoFocus={true}
         className="search"

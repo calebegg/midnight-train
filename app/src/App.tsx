@@ -6,7 +6,7 @@
  * found in the LICENSE file or at https://opensource.org/licenses/MIT.
  */
 
-import { RouteComponentProps, Router } from '@reach/router';
+import { RouteComponentProps, Router, globalHistory } from '@reach/router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 // @ts-ignore
 import icon from '../icon_512.png';
@@ -18,6 +18,12 @@ import { Nearby } from './Nearby';
 import { Search } from './Search';
 import { ArrivalsResponse } from '../../common/types';
 import { Trip } from './Trip';
+import { PageHeader, PageTitle } from './PageHeader';
+
+export enum LoadingStatus {
+  LOADING,
+  SUCCESS,
+}
 
 export function App() {
   const [position, setPosition] = useState<Position | null>(null);
@@ -30,27 +36,41 @@ export function App() {
 
   const [data, setData] = useState<ArrivalsResponse | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  async function loadArrivalsData() {
-    try {
-      const response = await (await fetch('/_/arrivals')).json();
-      setData(response.data);
-      if (response.errorMessage) setErrorMessage(response.errorMessage);
-    } catch (e) {
-      setErrorMessage('Failed to load arrival data. Try again later.');
-      return;
-    }
-  }
+  const [loadingStatus, setLoadingStatus] = useState<LoadingStatus>(
+    LoadingStatus.LOADING,
+  );
 
   useEffect(() => {
-    loadArrivalsData();
+    if (loadingStatus !== LoadingStatus.LOADING) return;
+    let abort = new AbortController();
+    (async () => {
+      try {
+        const response = await (
+          await fetch('/_/arrivals', { signal: abort.signal })
+        ).json();
+        if (abort.signal.aborted) return;
+        setData(response.data);
+        if (response.errorMessage) setErrorMessage(response.errorMessage);
+      } catch (e) {
+        setErrorMessage('Failed to load arrival data. Try again later.');
+        return;
+      } finally {
+        setLoadingStatus(LoadingStatus.SUCCESS);
+      }
+    })();
+    return () => {
+      abort.abort();
+    };
+  }, [loadingStatus]);
+
+  useEffect(() => {
     const intervalId = setInterval(() => {
-      loadArrivalsData();
+      setLoadingStatus(LoadingStatus.LOADING);
     }, 60_000);
     return () => {
       clearInterval(intervalId);
     };
-  }, []);
+  });
 
   const [favorites, setFavorites] = useState<Set<string>>(
     new Set(JSON.parse(localStorage.getItem('favorites') || '[]')),
@@ -87,10 +107,24 @@ export function App() {
         </p>
       )}
 
+      <PageHeader
+        loadingStatus={loadingStatus}
+        onRefresh={() => {
+          setLoadingStatus(LoadingStatus.LOADING);
+        }}
+      >
+        <Router primary={false}>
+          <PageTitle title="Nearby" path="/"></PageTitle>
+          <PageTitle title="Favorites" path="/favorites"></PageTitle>
+          <PageTitle title="Search" path="/search"></PageTitle>
+          <PageTitle title="Trip" path="/trip/*"></PageTitle>
+        </Router>
+      </PageHeader>
+
       <ErrorBoundary>
         <ArrivalsContext.Provider value={data}>
           <FavoritesContext.Provider value={favoritesContextValue}>
-            <Router>
+            <Router primary={false}>
               <Nearby path="/" position={position} />
               <Favorites path="/favorites" position={position} />
               <Search path="/search" />

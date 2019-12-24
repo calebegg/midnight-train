@@ -15,7 +15,7 @@ import { PageHeader } from './PageHeader';
 
 const { stopInfo } = generated;
 
-const walkTimesCache = new Map<string, number[]>();
+const walkTimesCache = new Map<string, Map<string, number>>();
 
 export function Nearby({
   position,
@@ -27,50 +27,44 @@ export function Nearby({
       .slice(0, 5);
   }, [position]);
 
-  const [walkTimes, setWalkTimes] = useState<Map<string, number>>(new Map());
+  const [walkTimes, setWalkTimes] = useState<Map<string, number>>(
+    walkTimesCache.get(getCoordKey(position)) ?? new Map(),
+  );
 
   useEffect(() => {
     (async () => {
       if (!position) return;
       if (nearestStops.length === 0) return;
 
-      function round(coord: number) {
-        return (Math.round(coord / 0.0005) * 0.0005).toFixed(4);
-      }
+      const originCoords = getCoordKey(position);
 
-      const originCoords = [
-        round(position.coords.latitude),
-        round(position.coords.longitude),
-      ].join(',');
-
-      const data =
+      const map =
         walkTimesCache.get(originCoords) ??
-        (await (
-          await fetch(
-            '/_/walktimes?' +
-              new URLSearchParams([
-                ['origin', originCoords],
-                ...nearestStops.map(id => {
-                  const stop = stopInfo[id as keyof typeof stopInfo];
-                  return [
-                    'destination[]',
-                    [stop.latitude, stop.longitude].join(','),
-                  ];
-                }),
-              ]),
-          )
-        ).json());
+        new Map(
+          ((await (
+            await fetch(
+              '/_/walktimes?' +
+                new URLSearchParams([
+                  ['origin', originCoords],
+                  ...nearestStops.map(id => {
+                    const stop = stopInfo[id as keyof typeof stopInfo];
+                    return [
+                      'destination[]',
+                      [stop.latitude, stop.longitude].join(','),
+                    ];
+                  }),
+                ]),
+            )
+          ).json()) as number[]).map((t, i) => [nearestStops[i], t]),
+        );
 
-      walkTimesCache.set(originCoords, data);
-      setWalkTimes(
-        new Map((data as number[]).map((t, i) => [nearestStops[i], t])),
-      );
+      walkTimesCache.set(originCoords, map);
+      setWalkTimes(map);
     })();
   }, [position]);
 
   return (
     <ErrorBoundary>
-      <PageHeader title="Nearby" />
       {!position ? <p>Locating you</p> : ''}
       {nearestStops.map(id => (
         <Station key={id} id={id} walkTime={walkTimes.get(id)} />
@@ -103,4 +97,16 @@ export function byDistance(position: Position | null) {
     if (!distanceCache) return 0;
     return distanceCache.get(a)! - distanceCache.get(b)!;
   };
+}
+
+function getCoordKey(position: Position | null) {
+  if (!position) return '';
+  return [
+    round(position.coords.latitude),
+    round(position.coords.longitude),
+  ].join(',');
+}
+
+function round(coord: number) {
+  return (Math.round(coord / 0.0005) * 0.0005).toFixed(4);
 }

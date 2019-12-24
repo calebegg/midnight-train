@@ -48,13 +48,16 @@ li,
 }
 
 h1 {
+  font-size: 34px;
+  font-weight: 300;
+  line-height: 48px;
+}
+
+header {
   position: sticky;
   top: 0;
   z-index: 1;
   padding-top: env(safe-area-inset-top);
-  font-size: 34px;
-  font-weight: 300;
-  line-height: 48px;
   background: var(--color-6);
   color: var(--contrast-6);
 }
@@ -183,7 +186,7 @@ nav .svg-inline--fa {
   flex-direction: row;
 }
 
-.page-header button.plain {
+header button.plain {
   width: 52px;
 }
 

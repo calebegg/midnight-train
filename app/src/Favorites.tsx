@@ -21,7 +21,6 @@ export function Favorites({
 
   return (
     <ErrorBoundary>
-      <PageHeader title="Favorites" />
       {favorites.size === 0 ? (
         <p>
           You don't have any favorites yet.{' '}
