@@ -6,26 +6,17 @@
  * found in the LICENSE file or at https://opensource.org/licenses/MIT.
  */
 
-import React, { memo, ReactNode, useContext, useEffect, useState } from 'react';
-import { ArrivalsContext, FavoritesContext } from './context';
-import generated from './generated/data.json';
-import { TimesData } from './types';
-import { faStar, faWalking, faRandom } from '@fortawesome/free-solid-svg-icons';
 import { faAccessibleIcon } from '@fortawesome/free-brands-svg-icons';
+import { faRandom, faStar, faWalking } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from '@reach/router';
+import React, { memo, ReactNode, useContext, useEffect, useState } from 'react';
+import { Stop, TimesData } from '../../common/types';
+import { ArrivalsContext, FavoritesContext } from './context';
+import generated from './generated/data.json';
 
 const stopInfo: {
-  [k: string]: {
-    name: string;
-    latitude: number;
-    longitude: number;
-    borough: string;
-    crossover: boolean;
-    ada: boolean;
-    headNorth?: string;
-    headSouth?: string;
-  };
+  [k: string]: Stop;
 } = generated.stopInfo;
 
 const BOROUGH_NAMES = {

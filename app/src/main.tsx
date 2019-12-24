@@ -14,4 +14,4 @@ navigator.serviceWorker.register('../service-worker.ts', { scope: '/' });
 
 render(<App />, document.querySelector('main')!);
 
-if (module && (module as any).hot) (module as any).hot.accept();
+if (module && module.hot) module.hot.accept();

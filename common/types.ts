@@ -19,3 +19,14 @@ export interface ArrivalsData {
 export interface TimesData {
   [line: string]: number[] | undefined;
 }
+
+export interface Stop {
+  name: string;
+  latitude: number;
+  longitude: number;
+  borough: string;
+  crossover: boolean;
+  ada: boolean;
+  headNorth?: string;
+  headSouth?: string;
+}

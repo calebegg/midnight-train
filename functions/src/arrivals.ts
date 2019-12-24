@@ -8,6 +8,7 @@
 
 import { https } from 'firebase-functions';
 import { fetchGtfs } from './gtfs';
+import { ArrivalsResponse, ArrivalsData } from '../../common/types';
 
 interface Arrival {
   service: string;
@@ -35,9 +36,9 @@ export const arrivals = https.onRequest(async (req, res) => {
     }
   }
 
-  const byStopJson: { [stopId: string]: any } = {};
+  const byStopJson: ArrivalsResponse = {};
   for (const [stopId, arrivalData] of byStop.entries()) {
-    const arrivalsJson: any = { stopId };
+    const arrivalsJson: ArrivalsData = { stopId };
     for (const direction of ['N', 'S'] as const) {
       const services = new Set(
         arrivalData.filter(a => a.direction === direction).map(a => a.service),
@@ -49,7 +50,7 @@ export const arrivals = https.onRequest(async (req, res) => {
           .filter(a => a.direction === direction && a.service === service)
           .sort((a, b) => a.time - b.time);
         // Sometimes duplicate arrival times appear in the data.
-        arrivalsJson[direction][service] = [
+        arrivalsJson[direction]![service] = [
           ...new Set(times.map(({ time }) => time * 1000)),
         ].slice(0, 6);
       }

@@ -14,7 +14,7 @@ import { Station } from './Station';
 
 const { stopInfo } = generated;
 
-const walkTimesCache = new Map<string, any>();
+const walkTimesCache = new Map<string, number[]>();
 
 export function Nearby({
   position,

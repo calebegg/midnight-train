@@ -16,7 +16,7 @@ import { Favorites } from './Favorites';
 import { Nav } from './Nav';
 import { Nearby } from './Nearby';
 import { Search } from './Search';
-import { ArrivalsResponse } from './types';
+import { ArrivalsResponse } from '../../common/types';
 import { Trip } from './Trip';
 
 export function App() {
