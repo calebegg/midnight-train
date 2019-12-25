@@ -7,7 +7,7 @@
  */
 
 import { RouteComponentProps } from '@reach/router';
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState } from 'react';
 import { ErrorBoundary } from './ErrorBoundary';
 import generated from './generated/data.json';
 import { Station } from './Station';
@@ -16,17 +16,8 @@ const { stopInfo } = generated;
 
 let sessionQuery = '';
 
-export function Search({ navigate, location }: RouteComponentProps) {
-  const [query, setQuery] = useState(
-    new URLSearchParams(location!.search).get('q') || sessionQuery || '',
-  );
-
-  useEffect(() => {
-    sessionQuery = query;
-    navigate!(location!.pathname + (query ? '?q=' + query : ''), {
-      replace: true,
-    });
-  }, [location, navigate, query]);
+export function Search({}: RouteComponentProps) {
+  const [query, setQuery] = useState(sessionQuery || '');
 
   const results = useMemo(() => {
     if (query === '') return [];
@@ -44,8 +35,9 @@ export function Search({ navigate, location }: RouteComponentProps) {
         autoFocus={true}
         className="search"
         value={query}
-        onChange={e => {
-          setQuery(e.target.value);
+        onChange={({ target: { value } }) => {
+          sessionQuery = value;
+          setQuery(value);
         }}
       />
       {results.map(id => (

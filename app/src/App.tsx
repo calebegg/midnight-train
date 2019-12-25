@@ -71,7 +71,7 @@ export function App() {
     return () => {
       clearInterval(intervalId);
     };
-  });
+  }, []);
 
   const [favorites, setFavorites] = useState<Set<string>>(
     new Set(JSON.parse(localStorage.getItem('favorites') || '[]')),
