@@ -104,7 +104,7 @@ export function App() {
         document.activeElement.blur();
       }
     });
-  });
+  }, []);
 
   return (
     <ErrorBoundary>
