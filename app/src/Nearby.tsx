@@ -12,7 +12,7 @@ import { ErrorBoundary } from './ErrorBoundary';
 import generated from './generated/data.json';
 import { Station } from './Station';
 
-const { stopInfo } = generated;
+let { stopInfo } = generated;
 
 const walkTimesCache = new Map<string, Map<string, number>>();
 
