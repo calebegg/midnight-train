@@ -7,12 +7,12 @@
  */
 
 import { RouteComponentProps } from '@reach/router';
-import React, { useEffect, useMemo, useState, useLayoutEffect } from 'react';
+import React, { useMemo, useState, useLayoutEffect } from 'react';
 import { ErrorBoundary } from './ErrorBoundary';
 import generated from './generated/data.json';
 import { Station } from './Station';
 
-let { stopInfo } = generated;
+const { stopInfo } = generated;
 
 const walkTimesCache = new Map<string, Map<string, number>>();
 
