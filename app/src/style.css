@@ -181,11 +181,6 @@ nav .svg-inline--fa {
   color: white;
 }
 
-.row {
-  display: flex;
-  flex-direction: row;
-}
-
 header button.plain,
 header a.plain {
   width: 52px;
@@ -233,28 +228,13 @@ ul.trip li {
   height: 24px;
 }
 
-/*
-  Background for time table items is the full page width so even if there are
-  missing items on one or the other side, the row spans the page.
-*/
-ul.time-table li::before {
-  content: '';
-  height: 32px;
-  display: block;
-  position: absolute;
-  left: 0;
-  right: 0;
-  z-index: -1;
-  margin-top: -4px;
-}
-
-ul.time-table li::before,
+ul.time-table li,
 ul.trip li {
   background-color: var(--color-4);
   color: var(--contrast-4);
 }
 
-ul.time-table li:nth-child(2n)::before,
+ul.time-table li:nth-child(2n),
 ul.trip li:nth-child(2n) {
   background-color: var(--color-5);
   color: var(--contrast-5);
@@ -270,6 +250,16 @@ ul.time-table li > a {
   bottom: 0;
   left: 0;
   text-decoration: none;
+}
+
+.north h3 {
+  position: relative;
+}
+
+.crossover-icon {
+  position: absolute;
+  right: -4px;
+  top: 6px;
 }
 
 input.search,

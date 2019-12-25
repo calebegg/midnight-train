@@ -7,7 +7,7 @@
  */
 
 import { faAccessibleIcon } from '@fortawesome/free-brands-svg-icons';
-import { faRandom, faStar, faWalking } from '@fortawesome/free-solid-svg-icons';
+import { faStar, faWalking } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from '@reach/router';
 import React, { memo, ReactNode, useContext, useEffect, useState } from 'react';
@@ -45,7 +45,6 @@ export function Station({ id, walkTime }: { id: string; walkTime?: number }) {
         </span>
         {station.name}
         <span className="metadata">
-          {station.crossover ? <FontAwesomeIcon icon={faRandom} /> : ''}
           {station.ada ? <FontAwesomeIcon icon={faAccessibleIcon} /> : ''}
         </span>
         {walkTime ? (
@@ -73,7 +72,29 @@ export function Station({ id, walkTime }: { id: string; walkTime?: number }) {
       </h2>
       <div className="row">
         <div className="north">
-          <h3>{station.headNorth || 'No service'}</h3>
+          <h3>
+            <span>{station.headNorth || 'No service'}</span>
+            {!station.crossover ? (
+              <svg
+                className="crossover-icon"
+                width="20"
+                height="20"
+                viewBox="0 0 120 120"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m45 15v90m30-90v90m-45-15l15 15 15-15m0-60l15-15 15 15m-60 0l60 60"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="12"
+                />
+              </svg>
+            ) : (
+              ''
+            )}
+          </h3>
           <TimeTable data={data.N} direction="N" stopId={id} />
         </div>
         <div className="south">
