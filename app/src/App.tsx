@@ -150,6 +150,21 @@ export function App() {
           </FavoritesContext.Provider>
         </ArrivalsContext.Provider>
       </ErrorBoundary>
+      <footer>
+        <ul>
+          <li>
+            <a href="https://github.com/calebegg/midnight-train">Source</a>
+          </li>
+          <li>
+            <a href="https://github.com/calebegg/midnight-train/issues">
+              File a bug
+            </a>
+          </li>
+          <li>
+            Made by <a href="https://ca.lebe.gg">calebegg</a>
+          </li>
+        </ul>
+      </footer>
     </ErrorBoundary>
   );
 }

@@ -288,6 +288,24 @@ textarea {
   height: 500px;
 }
 
+footer {
+  text-align: center;
+  margin-top: 32px;
+}
+
+footer ul li {
+  display: inline;
+}
+
+footer ul li:not(:first-child) {
+  padding-left: 0;
+}
+
+footer ul li:not(:first-child)::before {
+  content: '|';
+  padding-right: 8px;
+}
+
 .bullet {
   display: inline-block;
   background-color: #888;
