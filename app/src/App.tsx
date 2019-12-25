@@ -117,20 +117,22 @@ export function App() {
         </p>
       )}
 
-      <PageHeader
-        loadingStatus={loadingStatus}
-        onRefresh={() => {
-          setLoadingStatus(LoadingStatus.LOADING);
-        }}
-      >
-        <Router primary={false}>
-          <PageTitle title="Nearby" path="/"></PageTitle>
-          <PageTitle title="Favorites" path="/favorites"></PageTitle>
-          <PageTitle title="Search" path="/search"></PageTitle>
-          <PageTitle title="Trip" path="/trip/*"></PageTitle>
-        </Router>
-      </PageHeader>
-
+      {!location.pathname.startsWith('/trip/') ? (
+        <PageHeader
+          loadingStatus={loadingStatus}
+          onRefresh={() => {
+            setLoadingStatus(LoadingStatus.LOADING);
+          }}
+        >
+          <Router primary={false}>
+            <PageTitle title="Nearby" path="/"></PageTitle>
+            <PageTitle title="Favorites" path="/favorites"></PageTitle>
+            <PageTitle title="Search" path="/search"></PageTitle>
+          </Router>
+        </PageHeader>
+      ) : (
+        ''
+      )}
       <ErrorBoundary>
         <ArrivalsContext.Provider value={data}>
           <FavoritesContext.Provider value={favoritesContextValue}>

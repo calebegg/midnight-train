@@ -186,8 +186,10 @@ nav .svg-inline--fa {
   flex-direction: row;
 }
 
-header button.plain {
+header button.plain,
+header a.plain {
   width: 52px;
+  font-size: 24px;
 }
 
 .splash {
@@ -431,12 +433,16 @@ textarea {
   fill: #ffd63f;
 }
 
+a.plain,
 button.plain {
   padding: 0;
   border: none;
   background: none;
   font: inherit;
   color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .walk-time {

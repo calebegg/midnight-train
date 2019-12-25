@@ -26,7 +26,7 @@ export function Search({ navigate, location }: RouteComponentProps) {
     navigate!(location!.pathname + (query ? '?q=' + query : ''), {
       replace: true,
     });
-  }, [query]);
+  }, [location, navigate, query]);
 
   const results = useMemo(() => {
     if (query === '') return [];

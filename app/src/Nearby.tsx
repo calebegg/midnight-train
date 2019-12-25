@@ -7,7 +7,7 @@
  */
 
 import { RouteComponentProps } from '@reach/router';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useLayoutEffect } from 'react';
 import { ErrorBoundary } from './ErrorBoundary';
 import generated from './generated/data.json';
 import { Station } from './Station';
@@ -26,11 +26,9 @@ export function Nearby({
       .slice(0, 5);
   }, [position]);
 
-  const [walkTimes, setWalkTimes] = useState<Map<string, number>>(
-    walkTimesCache.get(getCoordKey(position)) ?? new Map(),
-  );
+  const [walkTimes, setWalkTimes] = useState<Map<string, number>>(new Map());
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     (async () => {
       if (!position) return;
       if (nearestStops.length === 0) return;
@@ -60,7 +58,7 @@ export function Nearby({
       walkTimesCache.set(originCoords, map);
       setWalkTimes(map);
     })();
-  }, [position]);
+  }, [nearestStops, position]);
 
   return (
     <ErrorBoundary>

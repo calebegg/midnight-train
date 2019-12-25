@@ -119,6 +119,10 @@ const TimeTable = memo(
   },
 );
 
+function getCurrentTimes(times: number[]) {
+  return times.filter(t => t - Date.now() > -60_000).slice(0, 3);
+}
+
 function ArrivalList({
   service,
   times,
@@ -130,15 +134,11 @@ function ArrivalList({
   direction: string;
   stopId: string;
 }) {
-  function getCurrentTimes() {
-    return times.filter(t => t - Date.now() > -60_000).slice(0, 3);
-  }
-
-  const [currentTimes, setCurrentTimes] = useState(getCurrentTimes());
+  const [currentTimes, setCurrentTimes] = useState(getCurrentTimes(times));
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setCurrentTimes(getCurrentTimes());
+      setCurrentTimes(getCurrentTimes(times));
     }, 10_000);
     return () => {
       clearInterval(intervalId);
@@ -161,20 +161,21 @@ function ArrivalList({
   );
 }
 
+function timeLeft(timestamp: number) {
+  return new Date(timestamp).getTime() - Date.now();
+}
+function minutesLeft(timestamp: number) {
+  return Math.floor(timeLeft(timestamp) / 60_000);
+}
+
 function TimeLabel({ timestamp }: { timestamp: number }) {
-  function timeLeft() {
-    return new Date(timestamp).getTime() - Date.now();
-  }
-  function minutesLeft() {
-    return Math.floor(timeLeft() / 60_000);
-  }
-  const [minutes, setMinutes] = useState(minutesLeft());
+  const [minutes, setMinutes] = useState(minutesLeft(timestamp));
 
   useEffect(() => {
-    const interval = timeLeft() % 60_000;
+    const interval = timeLeft(timestamp) % 60_000;
     const timeoutId = setTimeout(
       () => {
-        setMinutes(minutes => Math.min(minutes - 1, minutesLeft()));
+        setMinutes(minutes => Math.min(minutes - 1, minutesLeft(timestamp)));
       },
       interval > 0 ? interval : 60_000 - interval,
     );

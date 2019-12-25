@@ -11,6 +11,8 @@ import React, { useState, useEffect } from 'react';
 import generated from './generated/data.json';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { PageHeader, PageTitle } from './PageHeader';
+import { LoadingStatus } from './App';
 
 const { stopInfo } = generated;
 
@@ -36,41 +38,55 @@ export function Trip({
   stopId: string;
   direction: string;
 }) {
+  const [loadingStatus, setLoadingStatus] = useState<LoadingStatus>(
+    LoadingStatus.LOADING,
+  );
+
   const [data, setData] = useState<TripDataResponse[] | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [index, setIndex] = useState(-1);
 
-  async function loadTripData() {
-    try {
-      const response: TripDataResponse[] = await (
-        await fetch(`/_/trip/${service}/${direction}`)
-      ).json();
-      setData(response);
-      if (index === -1) {
-        const firstMatchIndex = response.findIndex(t =>
-          t.stops.some(s => s.stopId === stopId),
-        );
-        if (firstMatchIndex !== -1) {
-          setIndex(firstMatchIndex);
-        } else {
-          setIndex(0);
+  useEffect(() => {
+    const abort = new AbortController();
+    (async () => {
+      try {
+        const response: TripDataResponse[] = await (
+          await fetch(`/_/trip/${service}/${direction}`, {
+            signal: abort.signal,
+          })
+        ).json();
+        if (abort.signal.aborted) return;
+        setData(response);
+        if (index === -1) {
+          const firstMatchIndex = response.findIndex(t =>
+            t.stops.some(s => s.stopId === stopId),
+          );
+          if (firstMatchIndex !== -1) {
+            setIndex(firstMatchIndex);
+          } else {
+            setIndex(0);
+          }
         }
+      } catch (e) {
+        setErrorMessage('Failed to load trip data. Try again later.');
+        return;
+      } finally {
+        setLoadingStatus(LoadingStatus.SUCCESS);
       }
-    } catch (e) {
-      setErrorMessage('Failed to load trip data. Try again later.');
-      return;
-    }
-  }
+    })();
+    return () => {
+      abort.abort();
+    };
+  }, [direction, index, loadingStatus, service, stopId]);
 
   useEffect(() => {
-    loadTripData();
     const intervalId = setInterval(() => {
-      loadTripData();
+      setLoadingStatus(LoadingStatus.LOADING);
     }, 60_000);
     return () => {
       clearInterval(intervalId);
     };
-  }, []);
+  });
 
   return (
     <>
@@ -80,12 +96,17 @@ export function Trip({
         </p>
       )}
 
-      <h1>
-        <Link to="/" style={{ marginRight: 16 }}>
+      <PageHeader
+        onRefresh={() => {
+          setLoadingStatus(LoadingStatus.LOADING);
+        }}
+        loadingStatus={loadingStatus}
+      >
+        <Link to="/" className="plain" style={{ marginRight: 16 }}>
           <FontAwesomeIcon icon={faArrowLeft} />
         </Link>
-        Trip
-      </h1>
+        <PageTitle title="Trip"></PageTitle>
+      </PageHeader>
       <button disabled={index === 0} onClick={() => setIndex(index - 1)}>
         earlier
       </button>
