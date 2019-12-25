@@ -49,25 +49,27 @@ export function Trip({
   useEffect(() => {
     const abort = new AbortController();
     (async () => {
+      if (loadingStatus !== LoadingStatus.LOADING) return;
       try {
         const response: TripDataResponse[] = await (
           await fetch(`/_/trip/${service}/${direction}`, {
             signal: abort.signal,
           })
         ).json();
-        if (abort.signal.aborted) return;
         setData(response);
-        if (index === -1) {
+        setIndex(index => {
+          if (index !== -1) return index;
           const firstMatchIndex = response.findIndex(t =>
             t.stops.some(s => s.stopId === stopId),
           );
           if (firstMatchIndex !== -1) {
-            setIndex(firstMatchIndex);
+            return firstMatchIndex;
           } else {
-            setIndex(0);
+            return 0;
           }
-        }
+        });
       } catch (e) {
+        if (e.name === 'AbortError') return;
         setErrorMessage('Failed to load trip data. Try again later.');
         return;
       } finally {
@@ -77,7 +79,7 @@ export function Trip({
     return () => {
       abort.abort();
     };
-  }, [direction, index, loadingStatus, service, stopId]);
+  }, [direction, loadingStatus, service, stopId]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {

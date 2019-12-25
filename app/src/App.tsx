@@ -50,7 +50,6 @@ export function App() {
         const response = await (
           await fetch('/_/arrivals', { signal: abort.signal })
         ).json();
-        if (abort.signal.aborted) return;
         setData(response.data);
         if (response.errorMessage) setErrorMessage(response.errorMessage);
       } catch (e) {
