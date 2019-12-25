@@ -156,7 +156,7 @@ export function App() {
             <a href="https://github.com/calebegg/midnight-train">Source</a>
           </li>
           <li>
-            <a href="https://github.com/calebegg/midnight-train/issues">
+            <a href="https://github.com/calebegg/midnight-train/issues/new">
               File a bug
             </a>
           </li>
