@@ -42,11 +42,11 @@ export function Station({ id, walkTime }: { id: string; walkTime?: number }) {
       <h2>
         <span className="borough">
           {BOROUGH_NAMES[station.borough as keyof typeof BOROUGH_NAMES]}
+          <span className="metadata">
+            {station.ada ? <FontAwesomeIcon icon={faAccessibleIcon} /> : ''}
+          </span>
         </span>
         {station.name}
-        <span className="metadata">
-          {station.ada ? <FontAwesomeIcon icon={faAccessibleIcon} /> : ''}
-        </span>
         {walkTime ? (
           <a
             href={
