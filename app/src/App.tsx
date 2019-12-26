@@ -98,9 +98,15 @@ export function App() {
     localStorage.setItem('favorites', JSON.stringify([...favorites]));
   }, [favorites]);
 
+  const [pathname, setPathname] = useState(location.pathname);
+
   useEffect(() => {
-    return globalHistory.listen(({ action }) => {
-      if (action === 'PUSH' && document.activeElement instanceof HTMLElement) {
+    return globalHistory.listen(e => {
+      setPathname(e.location.pathname);
+      if (
+        e.action === 'PUSH' &&
+        document.activeElement instanceof HTMLElement
+      ) {
         document.activeElement.blur();
       }
     });
@@ -116,7 +122,7 @@ export function App() {
         </p>
       )}
 
-      {!location.pathname.startsWith('/trip/') ? (
+      {!pathname.startsWith('/trip/') ? (
         <PageHeader
           loadingStatus={loadingStatus}
           onRefresh={() => {
