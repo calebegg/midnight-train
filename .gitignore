@@ -1,8 +1,8 @@
 # Ephemoral/cache
 app/dist/
+functions/dist/
 .firebase/
 .cache/
-functions/lib/
 app/src/generated
 
 # Dependencies
