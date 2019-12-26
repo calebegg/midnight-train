@@ -8,17 +8,16 @@
 set -e
 
 npm i
-cd functions/ && npm i && cd ..
-cd app/ && npm i && cd ..
 
-mkdir data
+mkdir -p data
 wget -P data http://web.mta.info/developers/data/nyct/subway/google_transit.zip
 wget -P data http://web.mta.info/developers/data/nyct/subway/StationEntrances.csv
 wget -P data http://web.mta.info/developers/data/nyct/subway/Stations.csv
 unzip data/google_transit.zip -d data/google_transit
-rm data/google_transit.zip
-
-mkdir app/src/generated
+mkdir -p app/src/generated
 node scripts/generate_data.js > app/src/generated/data.json
+rm -r data
 
 npx firebase functions:config:get > functions/.runtimeconfig.json
+
+echo "Done"
