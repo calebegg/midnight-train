@@ -8,7 +8,7 @@
   "ignorePatterns": [
     "node_modules/",
     "functions/node_modules/",
-    "functions/lib/",
+    "functions/dist/",
     "app/node_modules/",
     "app/dist/"
   ],
