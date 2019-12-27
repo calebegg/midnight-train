@@ -13,8 +13,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { PageHeader, PageTitle } from './PageHeader';
 import { LoadingStatus } from './App';
+import { Station } from '../../common/types.js';
 
-const { stopInfo } = generated;
+const { stationInfo } = generated;
+
+const platformInfo: { [id: string]: Station['platforms'][0] } = {};
+for (const platform of Object.values(stationInfo).flatMap(s => s.platforms)) {
+  platformInfo[platform.id] = platform;
+}
 
 interface TripDataResponse {
   service: string;
@@ -121,7 +127,7 @@ export function Trip({
       <ul className={`trip s${service}`}>
         {data && index >= 0 ? (
           data[index].stops
-            .filter(s => s.stopId in stopInfo)
+            .filter(s => s.stopId in platformInfo)
             .map(s => (
               <li
                 key={s.stopId}
@@ -133,7 +139,9 @@ export function Trip({
                   })}
                 </time>
                 <span className="connector"></span>
-                <span>{stopInfo[s.stopId as keyof typeof stopInfo].name}</span>
+                <span>
+                  {platformInfo[s.stopId as keyof typeof platformInfo].name}
+                </span>
               </li>
             ))
         ) : (

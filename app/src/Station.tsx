@@ -11,13 +11,13 @@ import { faStar, faWalking } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from '@reach/router';
 import React, { memo, ReactNode, useContext, useEffect, useState } from 'react';
-import { Stop, TimesData } from '../../common/types';
+import { Station, TimesData } from '../../common/types';
 import { ArrivalsContext, FavoritesContext } from './context';
 import generated from './generated/data.json';
 
 const stopInfo: {
-  [k: string]: Stop;
-} = generated.stopInfo;
+  [k: string]: Station;
+} = generated.stationInfo;
 
 const BOROUGH_NAMES = {
   'Q': 'Queens',
@@ -33,10 +33,6 @@ export function Station({ id, walkTime }: { id: string; walkTime?: number }) {
   const station = stopInfo[id];
   const arrivalsData = useContext(ArrivalsContext);
 
-  const data = arrivalsData
-    ? arrivalsData[id] || { N: [], S: [] }
-    : { N: undefined, S: undefined };
-
   return (
     <section className={`station${walkTime ? ' with-walk-time' : ''}`}>
       <h2>
@@ -51,7 +47,7 @@ export function Station({ id, walkTime }: { id: string; walkTime?: number }) {
           <a
             href={
               'https://www.google.com/maps/?q=' +
-              `${station.latitude},${station.longitude}`
+              `${station.platforms[0].latitude},${station.platforms[0].longitude}`
             }
             className="walk-time"
           >
@@ -70,38 +66,60 @@ export function Station({ id, walkTime }: { id: string; walkTime?: number }) {
           <FontAwesomeIcon icon={faStar} />
         </label>
       </h2>
-      <div className="row">
-        <div className="north">
-          <h3>
-            <span>{station.headNorth || 'No service'}</span>
-            {!station.crossover ? (
-              <svg
-                className="crossover-icon"
-                width="20"
-                height="20"
-                viewBox="0 0 120 120"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="m45 15v90m30-90v90m-45-15l15 15 15-15m0-60l15-15 15 15m-60 0l60 60"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="12"
-                />
-              </svg>
-            ) : (
-              ''
-            )}
-          </h3>
-          <TimeTable data={data.N} direction="N" stopId={id} />
+      {station.platforms.map(platform => (
+        <div key={platform.id}>
+          {station.platforms.length > 1 ? (
+            <h3>
+              {platform.routes.map(r => (
+                <Bullet key={r} id={r} />
+              ))}{' '}
+              platform
+            </h3>
+          ) : (
+            ''
+          )}
+          <div className="row">
+            <div className="north">
+              <h4>
+                <span>{platform.headNorth || 'No service'}</span>
+                {!station.crossover ? (
+                  <svg
+                    className="crossover-icon"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 120 120"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="m45 15v90m30-90v90m-45-15l15 15 15-15m0-60l15-15 15 15m-60 0l60 60"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="12"
+                    />
+                  </svg>
+                ) : (
+                  ''
+                )}
+              </h4>
+              <TimeTable
+                data={arrivalsData?.[platform.id].N}
+                direction="N"
+                stopId={id}
+              />
+            </div>
+            <div className="south">
+              <h4>{platform.headSouth || 'No service'}</h4>
+              <TimeTable
+                data={arrivalsData?.[platform.id].S}
+                direction="S"
+                stopId={platform.id}
+              />
+            </div>
+          </div>
         </div>
-        <div className="south">
-          <h3>{station.headSouth || 'No service'}</h3>
-          <TimeTable data={data.S} direction="S" stopId={id} />
-        </div>
-      </div>
+      ))}
     </section>
   );
 }

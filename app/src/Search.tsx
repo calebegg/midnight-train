@@ -12,7 +12,7 @@ import { ErrorBoundary } from './ErrorBoundary';
 import generated from './generated/data.json';
 import { Station } from './Station';
 
-const { stopInfo } = generated;
+const { stationInfo } = generated;
 
 let sessionQuery = '';
 
@@ -21,7 +21,7 @@ export function Search({}: RouteComponentProps) {
 
   const results = useMemo(() => {
     if (query === '') return [];
-    return Object.entries(stopInfo)
+    return Object.entries(stationInfo)
       .filter(([, station]) =>
         station.name.toLocaleLowerCase().includes(query.toLocaleLowerCase()),
       )

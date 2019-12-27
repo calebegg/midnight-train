@@ -7,7 +7,7 @@
  */
 
 import { createContext } from 'react';
-import { ArrivalsResponse } from './types';
+import { ArrivalsResponse } from '../../common/types';
 
 export const FavoritesContext = createContext({
   favorites: new Set<string>(),

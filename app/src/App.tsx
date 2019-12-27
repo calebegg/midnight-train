@@ -6,19 +6,22 @@
  * found in the LICENSE file or at https://opensource.org/licenses/MIT.
  */
 
-import { RouteComponentProps, Router, globalHistory } from '@reach/router';
+import { globalHistory, RouteComponentProps, Router } from '@reach/router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { ArrivalsResponse } from '../../common/types';
 // @ts-ignore
 import icon from '../icon_512.png';
 import { ArrivalsContext, FavoritesContext } from './context';
 import { ErrorBoundary } from './ErrorBoundary';
 import { Favorites } from './Favorites';
+import generated from './generated/data.json';
 import { Nav } from './Nav';
 import { Nearby } from './Nearby';
-import { Search } from './Search';
-import { ArrivalsResponse } from '../../common/types';
-import { Trip } from './Trip';
 import { PageHeader, PageTitle } from './PageHeader';
+import { Search } from './Search';
+import { Trip } from './Trip';
+
+const { stationInfo } = generated;
 
 export enum LoadingStatus {
   LOADING,
@@ -79,7 +82,9 @@ export function App() {
   }, []);
 
   const [favorites, setFavorites] = useState<Set<string>>(
-    new Set(JSON.parse(localStorage.getItem('favorites') || '[]')),
+    new Set(
+      cleanUpFavorites(JSON.parse(localStorage.getItem('favorites') || '[]')),
+    ),
   );
 
   const toggleFavorite = useCallback(
@@ -187,4 +192,8 @@ function Splash({}: RouteComponentProps) {
       <h1>Midnight Train</h1>
     </div>
   );
+}
+
+function cleanUpFavorites(favorites: string[]) {
+  return favorites.filter(f => f in stationInfo);
 }
