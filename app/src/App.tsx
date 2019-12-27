@@ -33,10 +33,15 @@ export function App() {
   const [position, setPosition] = useState<Position | null>(null);
 
   useEffect(() => {
+    let cancelled = false;
     if (loadingStatus !== LoadingStatus.LOADING) return;
     navigator.geolocation.getCurrentPosition(l => {
+      if (cancelled) return;
       setPosition(l);
     });
+    return () => {
+      cancelled = true;
+    };
   }, [loadingStatus]);
 
   const [data, setData] = useState<ArrivalsResponse | null>(null);
