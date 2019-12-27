@@ -46,7 +46,8 @@ export function Station({ id, walkTime }: { id: string; walkTime?: number }) {
         {walkTime ? (
           <a
             href={
-              'https://www.google.com/maps/?q=' +
+              // Per: https://developers.google.com/maps/documentation/urls/guide
+              'https://www.google.com/maps/search/?api=1&query=' +
               `${station.platforms[0].latitude},${station.platforms[0].longitude}`
             }
             className="walk-time"
