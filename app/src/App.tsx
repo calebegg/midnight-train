@@ -6,7 +6,12 @@
  * found in the LICENSE file or at https://opensource.org/licenses/MIT.
  */
 
-import { globalHistory, RouteComponentProps, Router } from '@reach/router';
+import {
+  globalHistory,
+  RouteComponentProps,
+  Router,
+  Link,
+} from '@reach/router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ArrivalsResponse } from '../../common/types';
 // @ts-ignore
@@ -20,6 +25,7 @@ import { Nearby } from './Nearby';
 import { PageHeader, PageTitle } from './PageHeader';
 import { Search } from './Search';
 import { Trip } from './Trip';
+import { About } from './About';
 
 const { stationInfo } = generated;
 
@@ -138,11 +144,14 @@ export function App() {
           onRefresh={() => {
             setLoadingStatus(LoadingStatus.LOADING);
           }}
+          showRefresh={!pathname.startsWith('/about')}
+          showBack={pathname.startsWith('/about')}
         >
           <Router primary={false}>
             <PageTitle title="Nearby" path="/"></PageTitle>
             <PageTitle title="Favorites" path="/favorites"></PageTitle>
             <PageTitle title="Search" path="/search"></PageTitle>
+            <PageTitle title="About" path="/about"></PageTitle>
           </Router>
         </PageHeader>
       ) : (
@@ -162,6 +171,7 @@ export function App() {
                 direction="set-by-reach"
               />
               <Splash path="/splash" />
+              <About path="/about" />
             </Router>
           </FavoritesContext.Provider>
         </ArrivalsContext.Provider>
@@ -177,7 +187,7 @@ export function App() {
             </a>
           </li>
           <li>
-            Made by <a href="https://ca.lebe.gg">calebegg</a>
+            <Link to="/about">About</Link>
           </li>
         </ul>
       </footer>

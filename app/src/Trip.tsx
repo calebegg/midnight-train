@@ -6,11 +6,9 @@
  * found in the LICENSE file or at https://opensource.org/licenses/MIT.
  */
 
-import { RouteComponentProps, Link } from '@reach/router';
+import { RouteComponentProps } from '@reach/router';
 import React, { useState, useEffect } from 'react';
 import generated from './generated/data.json';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { PageHeader, PageTitle } from './PageHeader';
 import { LoadingStatus } from './App';
 import { Station } from '../../common/types.js';
@@ -109,10 +107,8 @@ export function Trip({
           setLoadingStatus(LoadingStatus.LOADING);
         }}
         loadingStatus={loadingStatus}
+        showBack={true}
       >
-        <Link to="/" className="plain" style={{ marginRight: 16 }}>
-          <FontAwesomeIcon icon={faArrowLeft} />
-        </Link>
         <PageTitle title="Trip"></PageTitle>
       </PageHeader>
       <button disabled={index === 0} onClick={() => setIndex(index - 1)}>
