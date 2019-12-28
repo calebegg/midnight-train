@@ -232,21 +232,32 @@ header a.plain {
   width: 50%;
 }
 
+.north,
+.south {
+  display: flex;
+  flex-direction: column;
+}
+
+ul.time-table {
+  flex: 1;
+}
+
+ul.time-table,
+ul.trip {
+  background: linear-gradient(
+    to bottom,
+    var(--color-4),
+    var(--color-4) 50%,
+    var(--color-5) 50%,
+    var(--color-5)
+  );
+  background-size: 100% 64px;
+}
+
 ul.time-table li,
 ul.trip li {
   height: 24px;
-}
-
-ul.time-table li,
-ul.trip li {
-  background-color: var(--color-4);
-  color: var(--contrast-4);
-}
-
-ul.time-table li:nth-child(2n),
-ul.trip li:nth-child(2n) {
-  background-color: var(--color-5);
-  color: var(--contrast-5);
+  color: white;
 }
 
 ul.time-table li {
@@ -456,6 +467,7 @@ footer ul li:not(:first-child)::before {
 
 a.plain,
 button.plain {
+  cursor: pointer;
   padding: 0;
   border: none;
   background: none;
