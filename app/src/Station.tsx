@@ -183,7 +183,7 @@ function ArrivalList({
   }, [times]);
 
   const content = [
-    <Bullet id={service} />,
+    <Bullet key={service} id={service} />,
     ' ',
     currentTimes
       .map(t => <TimeLabel key={t} timestamp={t} />)
