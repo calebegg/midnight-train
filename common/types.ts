@@ -20,7 +20,7 @@ export interface TimesData {
   [line: string]: number[] | undefined;
 }
 
-export interface Station {
+export interface StationData {
   name: string;
   borough: string;
   crossover: boolean;

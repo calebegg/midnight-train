@@ -11,12 +11,12 @@ import { faStar, faWalking } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from '@reach/router';
 import React, { memo, ReactNode, useContext, useEffect, useState } from 'react';
-import { Station, TimesData } from '../../common/types';
+import { StationData, TimesData } from '../../common/types';
 import { ArrivalsContext, FavoritesContext } from './context';
 import generated from './generated/data.json';
 
 const stopInfo: {
-  [k: string]: Station;
+  [k: string]: StationData;
 } = generated.stationInfo;
 
 const BOROUGH_NAMES = {
@@ -100,7 +100,9 @@ export function Station({ id, walkTime }: { id: string; walkTime?: number }) {
                 )}
               </h4>
               <TimeTable
-                data={arrivalsData?.[platform.id]?.N}
+                data={
+                  arrivalsData ? arrivalsData[platform.id]?.N || {} : undefined
+                }
                 direction="N"
                 stopId={id}
               />
@@ -108,7 +110,9 @@ export function Station({ id, walkTime }: { id: string; walkTime?: number }) {
             <div className="south">
               <h4>{platform.headSouth}</h4>
               <TimeTable
-                data={arrivalsData?.[platform.id]?.S}
+                data={
+                  arrivalsData ? arrivalsData[platform.id]?.S || {} : undefined
+                }
                 direction="S"
                 stopId={platform.id}
               />

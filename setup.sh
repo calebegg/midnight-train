@@ -9,6 +9,7 @@ set -e
 
 npm i
 
+rm -r data
 mkdir -p data
 wget -P data http://web.mta.info/developers/data/nyct/subway/google_transit.zip
 wget -P data http://web.mta.info/developers/data/nyct/subway/StationEntrances.csv
@@ -17,7 +18,6 @@ wget -P data http://web.mta.info/developers/data/nyct/subway/StationComplexes.cs
 unzip data/google_transit.zip -d data/google_transit
 mkdir -p app/src/generated
 node scripts/generate_data.js > app/src/generated/data.json
-rm -r data
 
 npx firebase functions:config:get > functions/.runtimeconfig.json
 

@@ -11,11 +11,11 @@ import React, { useState, useEffect } from 'react';
 import generated from './generated/data.json';
 import { PageHeader, PageTitle } from './PageHeader';
 import { LoadingStatus } from './App';
-import { Station } from '../../common/types.js';
+import { StationData } from '../../common/types';
 
 const { stationInfo } = generated;
 
-const platformInfo: { [id: string]: Station['platforms'][0] } = {};
+const platformInfo: { [id: string]: StationData['platforms'][0] } = {};
 for (const platform of Object.values(stationInfo).flatMap(s => s.platforms)) {
   platformInfo[platform.id] = platform;
 }
