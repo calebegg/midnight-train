@@ -182,18 +182,25 @@ function ArrivalList({
     };
   }, [times]);
 
+  const content = [
+    <Bullet id={service} />,
+    ' ',
+    currentTimes
+      .map(t => <TimeLabel key={t} timestamp={t} />)
+      .reduce((acc, v) => {
+        if (acc.length > 0) acc.push(', ');
+        acc.push(v);
+        return acc;
+      }, [] as ReactNode[]),
+  ];
+
   return (
     <li>
-      <Link to={`/trip/${service}/${direction}/${stopId}`}>
-        <Bullet id={service} />{' '}
-        {currentTimes
-          .map(t => <TimeLabel key={t} timestamp={t} />)
-          .reduce((acc, v) => {
-            if (acc.length > 0) acc.push(', ');
-            acc.push(v);
-            return acc;
-          }, [] as ReactNode[])}
-      </Link>
+      {process.env.NODE_ENV === 'production' ? (
+        content
+      ) : (
+        <Link to={`/trip/${service}/${direction}/${stopId}`}>{content}</Link>
+      )}
     </li>
   );
 }
