@@ -18,19 +18,20 @@ export function About({}: RouteComponentProps) {
         lots of apps and services for help with navigation and wayfinding.
         Midnight Train is for a day to day rider who knows where they're going
         and wants one-tap answers to questions like:
-        <ul>
-          <li>
-            Is the L train running normally? (real time arrival data typically
-            offers a quick answer to that question without having to read and
-            understand complex service announcements).
-          </li>
-          <li>Should I walk three minutes farther to take a G?</li>
-          <li>Should I take the J that's coming now or wait for the next M?</li>
-          <li>
-            Do I need to message my boss to tell them I'll be a few minutes
-            late?
-          </li>
-        </ul>
+      </p>
+      <ul>
+        <li>
+          Is the L train running normally? (real time arrival data typically
+          offers a quick answer to that question without having to read and
+          understand complex service announcements).
+        </li>
+        <li>Should I walk three minutes farther to take a G?</li>
+        <li>Should I take the J that's coming now or wait for the next M?</li>
+        <li>
+          Do I need to message my boss to tell them I'll be a few minutes late?
+        </li>
+      </ul>
+      <p>
         It's a work in progress for now, but the basic functionality I want from
         it is there.
       </p>
