@@ -11,7 +11,6 @@ import React, { useMemo, useState } from 'react';
 import { ErrorBoundary } from './ErrorBoundary';
 import generated from './generated/data.json';
 import { Station } from './Station';
-import { StationData } from '../../common/types';
 
 const { stationInfo } = generated;
 
