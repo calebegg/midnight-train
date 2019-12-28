@@ -70,12 +70,7 @@ export function Station({ id, walkTime }: { id: string; walkTime?: number }) {
       {station.platforms.map(platform => (
         <div key={platform.id}>
           {station.platforms.length > 1 ? (
-            <h3>
-              {platform.routes.map(r => (
-                <Bullet key={r} id={r} />
-              ))}{' '}
-              platform
-            </h3>
+            <h3>{platform.routes.join('•')} platform</h3>
           ) : (
             ''
           )}
@@ -139,15 +134,17 @@ const TimeTable = memo(
       <ul className="time-table">
         {data ? (
           Object.entries(data).length > 0 ? (
-            Object.entries(data).map(([service, times]) => (
-              <ArrivalList
-                key={service}
-                service={service}
-                times={times || []}
-                direction={direction}
-                stopId={stopId}
-              />
-            ))
+            Object.entries(data)
+              .sort((a, b) => a[0].localeCompare(b[0]))
+              .map(([service, times]) => (
+                <ArrivalList
+                  key={service}
+                  service={service}
+                  times={times || []}
+                  direction={direction}
+                  stopId={stopId}
+                />
+              ))
           ) : (
             <li>No upcoming arrivals</li>
           )
