@@ -100,9 +100,7 @@ export async function fetchGtfs() {
     feedCache[tripId] = {
       tripId,
       service,
-      times: updates.map(u =>
-        u.arrival ? +u.arrival.time : +u.departure.time,
-      ),
+      times: updates.filter(u => u.arrival).map(u => +u.arrival.time),
       stops: updates.map(u => u.stopId),
     };
   }

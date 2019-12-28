@@ -77,7 +77,7 @@ export function Station({ id, walkTime }: { id: string; walkTime?: number }) {
           <div className="row">
             <div className="north">
               <h4>
-                <span>{platform.headNorth || 'No service'}</span>
+                <span>{platform.headNorth}</span>
                 {!station.crossover ? (
                   <svg
                     className="crossover-icon"
@@ -100,15 +100,15 @@ export function Station({ id, walkTime }: { id: string; walkTime?: number }) {
                 )}
               </h4>
               <TimeTable
-                data={arrivalsData?.[platform.id].N}
+                data={arrivalsData?.[platform.id]?.N}
                 direction="N"
                 stopId={id}
               />
             </div>
             <div className="south">
-              <h4>{platform.headSouth || 'No service'}</h4>
+              <h4>{platform.headSouth}</h4>
               <TimeTable
-                data={arrivalsData?.[platform.id].S}
+                data={arrivalsData?.[platform.id]?.S}
                 direction="S"
                 stopId={platform.id}
               />

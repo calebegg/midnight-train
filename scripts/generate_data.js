@@ -75,8 +75,8 @@ for (const stop of stops) {
     routes: station['Daytime Routes'].split(/\s/g),
     latitude: +stop.stop_lat,
     longitude: +stop.stop_lon,
-    headNorth: station['North Direction Label'] || 'Arrivals',
-    headSouth: station['South Direction Label'] || 'Arrivals',
+    headNorth: station['North Direction Label'] || '',
+    headSouth: station['South Direction Label'] || '',
   });
 }
 
