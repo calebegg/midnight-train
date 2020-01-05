@@ -161,7 +161,8 @@ const TimeTable = memo(
 );
 
 function getCurrentTimes(times: number[]) {
-  return times.filter(t => t - Date.now() > -60_000).slice(0, 3);
+  // N.B.: If we change rounding mechanism below, this needs to change too.
+  return times.filter(t => t - Date.now() > 0).slice(0, 3);
 }
 
 function ArrivalList({
@@ -213,6 +214,7 @@ function timeLeft(timestamp: number) {
   return new Date(timestamp).getTime() - Date.now();
 }
 function minutesLeft(timestamp: number) {
+  // N.B.: If we change rounding mechanism here, filtering needs to change above.
   return Math.floor(timeLeft(timestamp) / 60_000);
 }
 
