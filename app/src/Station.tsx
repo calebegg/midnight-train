@@ -11,7 +11,7 @@ import { faStar, faWalking } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from '@reach/router';
 import React, { memo, ReactNode, useContext, useEffect, useState } from 'react';
-import { StationData, TimesData } from '../../common/types';
+import { StationData, TimesByService } from '../../common/types';
 import { ArrivalsContext, FavoritesContext } from './context';
 import generated from './generated/data.json';
 
@@ -130,7 +130,7 @@ const TimeTable = memo(
     direction,
     stopId,
   }: {
-    data?: TimesData;
+    data?: TimesByService;
     direction: string;
     stopId: string;
   }) => {
@@ -190,7 +190,7 @@ function ArrivalList({
     <Bullet key={service} id={service} />,
     ' ',
     currentTimes
-      .map(t => <TimeLabel key={t} timestamp={t} />)
+      .map(t => <TimeLabel key={t} time={t} />)
       .reduce((acc, v) => {
         if (acc.length > 0) acc.push(', ');
         acc.push(v);
@@ -216,21 +216,21 @@ function minutesLeft(timestamp: number) {
   return Math.floor(timeLeft(timestamp) / 60_000);
 }
 
-function TimeLabel({ timestamp }: { timestamp: number }) {
-  const [minutes, setMinutes] = useState(minutesLeft(timestamp));
+function TimeLabel({ time }: { time: number }) {
+  const [minutes, setMinutes] = useState(minutesLeft(time));
 
   useEffect(() => {
-    const interval = timeLeft(timestamp) % 60_000;
+    const interval = timeLeft(time) % 60_000;
     const timeoutId = setTimeout(
       () => {
-        setMinutes(minutes => Math.min(minutes - 1, minutesLeft(timestamp)));
+        setMinutes(minutes => Math.min(minutes - 1, minutesLeft(time)));
       },
       interval > 0 ? interval : 60_000 - interval,
     );
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [timestamp, minutes]);
+  }, [time, minutes]);
 
   return <span>{minutes}m</span>;
 }

@@ -4,6 +4,7 @@ functions/dist/
 .firebase/
 .cache/
 app/src/generated
+functions/generated/
 
 # Dependencies
 node_modules/

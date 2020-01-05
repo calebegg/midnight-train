@@ -11,12 +11,12 @@ export interface ArrivalsResponse {
 }
 
 export interface ArrivalsData {
-  N?: TimesData;
-  S?: TimesData;
+  N?: TimesByService;
+  S?: TimesByService;
   stopId: string;
 }
 
-export interface TimesData {
+export interface TimesByService {
   [line: string]: number[] | undefined;
 }
 

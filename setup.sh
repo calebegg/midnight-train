@@ -21,4 +21,11 @@ node scripts/generate_data.js > app/src/generated/data.json
 
 npx firebase functions:config:get > functions/.runtimeconfig.json
 
+mkdir -p functions/generated
+wget -O functions/generated/nyct-subway.proto http://datamine.mta.info/sites/all/files/pdfs/nyct-subway.proto.txt
+wget -P functions/generated https://developers.google.com/transit/gtfs-realtime/gtfs-realtime.proto
+npx pbjs -t static-module -w commonjs -o functions/generated/nyct.js functions/generated/nyct-subway.proto
+npx pbts -o functions/generated/nyct.d.ts functions/generated/nyct.js
+cp -R functions/generated functions/dist/functions
+
 echo "Done"
