@@ -6,19 +6,28 @@
  * found in the LICENSE file or at https://opensource.org/licenses/MIT.
  */
 
-import { RouteComponentProps, Router, globalHistory } from '@reach/router';
+import {
+  globalHistory,
+  RouteComponentProps,
+  Router,
+  Link,
+} from '@reach/router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { ArrivalsResponse } from '../../common/types';
 // @ts-ignore
 import icon from '../icon_512.png';
 import { ArrivalsContext, FavoritesContext } from './context';
 import { ErrorBoundary } from './ErrorBoundary';
 import { Favorites } from './Favorites';
+import generated from './generated/data.json';
 import { Nav } from './Nav';
 import { Nearby } from './Nearby';
-import { Search } from './Search';
-import { ArrivalsResponse } from '../../common/types';
-import { Trip } from './Trip';
 import { PageHeader, PageTitle } from './PageHeader';
+import { Search } from './Search';
+import { Trip } from './Trip';
+import { About } from './About';
+
+const { stationInfo } = generated;
 
 export enum LoadingStatus {
   LOADING,
@@ -74,7 +83,9 @@ export function App() {
   }, []);
 
   const [favorites, setFavorites] = useState<Set<string>>(
-    new Set(JSON.parse(localStorage.getItem('favorites') || '[]')),
+    new Set(
+      cleanUpFavorites(JSON.parse(localStorage.getItem('favorites') || '[]')),
+    ),
   );
 
   const toggleFavorite = useCallback(
@@ -128,11 +139,14 @@ export function App() {
           onRefresh={() => {
             setLoadingStatus(LoadingStatus.LOADING);
           }}
+          showRefresh={!pathname.startsWith('/about')}
+          showBack={pathname.startsWith('/about')}
         >
           <Router primary={false}>
             <PageTitle title="Nearby" path="/"></PageTitle>
             <PageTitle title="Favorites" path="/favorites"></PageTitle>
             <PageTitle title="Search" path="/search"></PageTitle>
+            <PageTitle title="About" path="/about"></PageTitle>
           </Router>
         </PageHeader>
       ) : (
@@ -152,6 +166,7 @@ export function App() {
                 direction="set-by-reach"
               />
               <Splash path="/splash" />
+              <About path="/about" />
             </Router>
           </FavoritesContext.Provider>
         </ArrivalsContext.Provider>
@@ -167,7 +182,7 @@ export function App() {
             </a>
           </li>
           <li>
-            Made by <a href="https://ca.lebe.gg">calebegg</a>
+            <Link to="/about">About</Link>
           </li>
         </ul>
       </footer>
@@ -182,4 +197,8 @@ function Splash({}: RouteComponentProps) {
       <h1>Midnight Train</h1>
     </div>
   );
+}
+
+function cleanUpFavorites(favorites: string[]) {
+  return favorites.filter(f => f in stationInfo);
 }

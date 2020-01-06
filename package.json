@@ -5,6 +5,7 @@
     "build:app": "cd app; parcel build --experimental-scope-hoisting index.html",
     "build:functions": "cd functions; tsc",
     "build": "concurrently \"npm run build:app\" \"npm run build:functions\"",
+    "watch:functions": "cd functions; tsc --watch",
     "deploy:app": "npm run lint && npm run build && firebase deploy --only hosting",
     "deploy:functions": "npm run lint && firebase deploy --only functions",
     "deploy": "npm run lint && npm run build && firebase deploy",
@@ -27,6 +28,7 @@
     "husky": "^2.4.1",
     "parcel": "^1.12.4",
     "prettier": "^1.19.1",
+    "protobufjs": "^6.8.8",
     "typescript": "^3.7.4"
   },
   "husky": {

@@ -6,10 +6,10 @@
  * found in the LICENSE file or at https://opensource.org/licenses/MIT.
  */
 
-import { transit_realtime } from 'gtfs-realtime-bindings';
 import admin from 'firebase-admin';
 import request from 'request-promise-native';
 import { config } from 'firebase-functions';
+import { transit_realtime } from '../generated/nyct';
 
 const { FeedMessage } = transit_realtime;
 
@@ -54,7 +54,7 @@ export async function fetchGtfs() {
             url: `http://datamine.mta.info/mta_esi.php?key=${API_KEY}&feed_id=${feedId}`,
             encoding: null,
           });
-          value = FeedMessage.decode(gtfs).entity;
+          value = FeedMessage.decode(gtfs);
         } catch {
           try {
             const file = admin
@@ -67,7 +67,7 @@ export async function fetchGtfs() {
               }`,
             );
             const gtfs = (await file.download())[0];
-            value = FeedMessage.decode(gtfs).entity;
+            value = FeedMessage.decode(gtfs);
           } catch (e) {
             console.warn('Cache failed', e);
             return { status: 'rejected', reason: new Error(services) };
@@ -82,7 +82,7 @@ export async function fetchGtfs() {
   )
     .map(result => {
       if (result.status === 'fulfilled') {
-        return result.value;
+        return result.value!;
       } else {
         for (const failure of (result.reason as Error).message.split('')) {
           failures.push(failure);
@@ -90,20 +90,37 @@ export async function fetchGtfs() {
       }
     })
     .filter(v => !!v)
+    .map(r => {
+      return r!.entity.map(entity => ({
+        timestamp: r!.header.timestamp,
+        entity,
+      }));
+    })
     .reduce((acc, v) => [...acc, ...v], []);
 
-  for (const entity of entities) {
+  const tripDelays: { [tripId: string]: number } = {};
+  for (const { timestamp, entity } of entities) {
+    if (!entity.vehicle) continue;
+    tripDelays[entity.vehicle.trip!.tripId!] =
+      (timestamp as Long).toNumber() -
+      (entity.vehicle.timestamp as Long).toNumber();
+  }
+  for (const { entity } of entities) {
     if (!entity.tripUpdate) continue;
-    const service = entity.tripUpdate.trip.routeId;
-    const tripId = entity.tripUpdate.trip.tripId;
-    const updates: any[] = entity.tripUpdate.stopTimeUpdate;
+    const service = entity.tripUpdate.trip.routeId!;
+    const tripId = entity.tripUpdate.trip.tripId!;
+    const updates = entity.tripUpdate.stopTimeUpdate!;
     feedCache[tripId] = {
       tripId,
       service,
-      times: updates.map(u =>
-        u.arrival ? +u.arrival.time : +u.departure.time,
-      ),
-      stops: updates.map(u => u.stopId),
+      times: updates
+        .filter(u => u.arrival)
+        .map(
+          u =>
+            +u.arrival!.time! +
+            (tripDelays[tripId] > 90 ? tripDelays[tripId] : 0),
+        ),
+      stops: updates.map(u => u.stopId!),
     };
   }
   updated = Date.now();

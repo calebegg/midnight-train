@@ -25,11 +25,11 @@ export const arrivals = https.onRequest(async (req, res) => {
 
   for (const trip of Object.values(data)) {
     const { service, tripId } = trip;
-    for (let i = 0; i < trip.stops.length; i++) {
+    for (let i = 0; i < trip.times.length; i++) {
       const stopIdAndDirection: string = trip.stops[i];
       const stopId = stopIdAndDirection.slice(0, stopIdAndDirection.length - 1);
       const direction = stopIdAndDirection.slice(-1);
-      const time: number = trip.times[i];
+      const time = trip.times[i];
       byStop.set(stopId, [
         ...(byStop.get(stopId) || []),
         { service, tripId, time, direction },
@@ -47,13 +47,12 @@ export const arrivals = https.onRequest(async (req, res) => {
 
       arrivalsJson[direction] = {};
       for (const service of services) {
-        const times = arrivalData
+        const arrivals = arrivalData
           .filter(a => a.direction === direction && a.service === service)
           .sort((a, b) => a.time - b.time);
-        // Sometimes duplicate arrival times appear in the data.
         arrivalsJson[direction]![service] = [
-          ...new Set(times.map(({ time }) => time * 1000)),
-        ].slice(0, 6);
+          ...new Set(arrivals.map(({ time }) => time * 1000)),
+        ].slice(0, 4);
       }
     }
     byStopJson[stopId] = arrivalsJson;

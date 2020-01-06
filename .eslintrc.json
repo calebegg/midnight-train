@@ -9,6 +9,7 @@
     "node_modules/",
     "functions/node_modules/",
     "functions/dist/",
+    "functions/generated/",
     "app/node_modules/",
     "app/dist/"
   ],

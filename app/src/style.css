@@ -71,6 +71,15 @@ h2 {
 }
 
 h3 {
+  font-size: 10px;
+  line-height: 1;
+  margin-bottom: -4px;
+  font-weight: normal;
+  background: var(--color-3);
+  color: var(--contrast-3);
+}
+
+h4 {
   font-size: 18px;
   line-height: 24px;
   font-weight: bold;
@@ -223,21 +232,32 @@ header a.plain {
   width: 50%;
 }
 
+.north,
+.south {
+  display: flex;
+  flex-direction: column;
+}
+
+ul.time-table {
+  flex: 1;
+}
+
+ul.time-table,
+ul.trip {
+  background: linear-gradient(
+    to bottom,
+    var(--color-4),
+    var(--color-4) 50%,
+    var(--color-5) 50%,
+    var(--color-5)
+  );
+  background-size: 100% 64px;
+}
+
 ul.time-table li,
 ul.trip li {
   height: 24px;
-}
-
-ul.time-table li,
-ul.trip li {
-  background-color: var(--color-4);
-  color: var(--contrast-4);
-}
-
-ul.time-table li:nth-child(2n),
-ul.trip li:nth-child(2n) {
-  background-color: var(--color-5);
-  color: var(--contrast-5);
+  color: white;
 }
 
 ul.time-table li {
@@ -252,7 +272,7 @@ ul.time-table li > a {
   text-decoration: none;
 }
 
-.north h3 {
+.north h4 {
   position: relative;
 }
 
@@ -300,12 +320,16 @@ footer ul li:not(:first-child)::before {
   display: inline-block;
   background-color: #888;
   color: white;
-  width: 24px;
-  height: 24px;
-  line-height: 24px;
+  width: 1.5em;
+  height: 1.5em;
+  line-height: 1.5em;
   text-align: center;
   border-radius: 50%;
   font-weight: bold;
+}
+
+.bullet + .bullet {
+  margin-left: 4px;
 }
 
 .bullet[class$='X'] {
@@ -443,6 +467,7 @@ footer ul li:not(:first-child)::before {
 
 a.plain,
 button.plain {
+  cursor: pointer;
   padding: 0;
   border: none;
   background: none;

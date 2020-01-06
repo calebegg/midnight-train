@@ -11,22 +11,27 @@ export interface ArrivalsResponse {
 }
 
 export interface ArrivalsData {
-  N?: TimesData;
-  S?: TimesData;
+  N?: TimesByService;
+  S?: TimesByService;
   stopId: string;
 }
 
-export interface TimesData {
+export interface TimesByService {
   [line: string]: number[] | undefined;
 }
 
-export interface Stop {
+export interface StationData {
   name: string;
-  latitude: number;
-  longitude: number;
   borough: string;
   crossover: boolean;
   ada: boolean;
-  headNorth?: string;
-  headSouth?: string;
+  platforms: Array<{
+    id: string;
+    name: string;
+    routes: string[];
+    latitude: number;
+    longitude: number;
+    headNorth?: string;
+    headSouth?: string;
+  }>;
 }

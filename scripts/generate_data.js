@@ -8,7 +8,6 @@
 
 const parse = require('csv-parse/lib/sync');
 const fs = require('fs');
-const boroughs = require('./boroughs.json');
 
 const stops = parse(fs.readFileSync('./data/google_transit/stops.txt'), {
   columns: true,
@@ -19,6 +18,10 @@ const stations = parse(fs.readFileSync('./data/Stations.csv'), {
 });
 
 const entrances = parse(fs.readFileSync('./data/StationEntrances.csv'), {
+  columns: true,
+});
+
+const complexes = parse(fs.readFileSync('./data/StationComplexes.csv'), {
   columns: true,
 });
 
@@ -38,11 +41,15 @@ for (const s of stations) {
   stationsByStopId[s['GTFS Stop ID']] = s;
 }
 
-const stopInfo = {};
+const complexNames = {};
+for (const c of complexes) {
+  complexNames[c['Complex ID']] = c['Complex Name'];
+}
+
+const stationInfo = {};
 
 for (const stop of stops) {
   if (stop.parent_station) continue;
-  if (!boroughs[stop.stop_id]) throw new Error('missing borough');
   const entrance =
     entrancesByLatLon[
       `${normalize(stop.stop_lat)},${normalize(stop.stop_lon)}`
@@ -52,17 +59,26 @@ for (const stop of stops) {
     // Phantom stations: 140, H19, N12, S10, S12
     continue;
   }
-  stopInfo[stop.stop_id] = {
+  const complexId = station['Complex ID'];
+  if (!stationInfo[complexId]) {
+    stationInfo[complexId] = {
+      name: complexNames[complexId] || stop.stop_name,
+      borough: station['Borough'],
+      crossover: entrance ? entrance.Free_Crossover === 'TRUE' : false,
+      ada: entrance ? entrance.ADA === 'TRUE' : false,
+      platforms: [],
+    };
+  }
+  stationInfo[complexId].platforms.push({
+    id: stop.stop_id,
     name: stop.stop_name,
+    routes: station['Daytime Routes'].split(/\s/g),
     latitude: +stop.stop_lat,
     longitude: +stop.stop_lon,
-    borough: station['Borough'],
-    crossover: entrance ? entrance.Free_Crossover === 'TRUE' : false,
-    ada: entrance ? entrance.ADA === 'TRUE' : false,
-    headNorth: station['North Direction Label'] || 'Arrivals',
-    headSouth: station['South Direction Label'] || 'Arrivals',
-  };
+    headNorth: station['North Direction Label'] || stop.stop_name,
+    headSouth: station['South Direction Label'] || stop.stop_name,
+  });
 }
 
 // eslint-disable-next-line no-console
-console.log(JSON.stringify({ stopInfo }, null, 2));
+console.log(JSON.stringify({ stationInfo }, null, 2));

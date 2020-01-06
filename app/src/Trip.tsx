@@ -6,15 +6,19 @@
  * found in the LICENSE file or at https://opensource.org/licenses/MIT.
  */
 
-import { RouteComponentProps, Link } from '@reach/router';
+import { RouteComponentProps } from '@reach/router';
 import React, { useState, useEffect } from 'react';
 import generated from './generated/data.json';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { PageHeader, PageTitle } from './PageHeader';
 import { LoadingStatus } from './App';
+import { StationData } from '../../common/types';
 
-const { stopInfo } = generated;
+const { stationInfo } = generated;
+
+const platformInfo: { [id: string]: StationData['platforms'][0] } = {};
+for (const platform of Object.values(stationInfo).flatMap(s => s.platforms)) {
+  platformInfo[platform.id] = platform;
+}
 
 interface TripDataResponse {
   service: string;
@@ -103,10 +107,8 @@ export function Trip({
           setLoadingStatus(LoadingStatus.LOADING);
         }}
         loadingStatus={loadingStatus}
+        showBack={true}
       >
-        <Link to="/" className="plain" style={{ marginRight: 16 }}>
-          <FontAwesomeIcon icon={faArrowLeft} />
-        </Link>
         <PageTitle title="Trip"></PageTitle>
       </PageHeader>
       <button disabled={index === 0} onClick={() => setIndex(index - 1)}>
@@ -121,7 +123,7 @@ export function Trip({
       <ul className={`trip s${service}`}>
         {data && index >= 0 ? (
           data[index].stops
-            .filter(s => s.stopId in stopInfo)
+            .filter(s => s.stopId in platformInfo)
             .map(s => (
               <li
                 key={s.stopId}
@@ -133,7 +135,9 @@ export function Trip({
                   })}
                 </time>
                 <span className="connector"></span>
-                <span>{stopInfo[s.stopId as keyof typeof stopInfo].name}</span>
+                <span>
+                  {platformInfo[s.stopId as keyof typeof platformInfo].name}
+                </span>
               </li>
             ))
         ) : (

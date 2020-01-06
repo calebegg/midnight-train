@@ -12,16 +12,16 @@ import { ErrorBoundary } from './ErrorBoundary';
 import generated from './generated/data.json';
 import { Station } from './Station';
 
-const { stopInfo } = generated;
+const { stationInfo } = generated;
 
 const walkTimesCache = new Map<string, Map<string, number>>();
 
 export function Nearby({
   position,
 }: { position: Position | null } & RouteComponentProps) {
-  const nearestStops = useMemo(() => {
+  const nearestStations = useMemo(() => {
     if (!position) return [];
-    return Object.keys(stopInfo)
+    return Object.keys(stationInfo)
       .sort(byDistance(position))
       .slice(0, 5);
   }, [position]);
@@ -31,7 +31,7 @@ export function Nearby({
   useLayoutEffect(() => {
     (async () => {
       if (!position) return;
-      if (nearestStops.length === 0) return;
+      if (nearestStations.length === 0) return;
 
       const originCoords = getCoordKey(position);
 
@@ -43,27 +43,30 @@ export function Nearby({
               '/_/walktimes?' +
                 new URLSearchParams([
                   ['origin', originCoords],
-                  ...nearestStops.map(id => {
-                    const stop = stopInfo[id as keyof typeof stopInfo];
+                  ...nearestStations.map(id => {
+                    const station = stationInfo[id as keyof typeof stationInfo];
                     return [
                       'destination[]',
-                      [stop.latitude, stop.longitude].join(','),
+                      [
+                        station.platforms[0].latitude,
+                        station.platforms[0].longitude,
+                      ].join(','),
                     ];
                   }),
                 ]),
             )
-          ).json()) as number[]).map((t, i) => [nearestStops[i], t]),
+          ).json()) as number[]).map((t, i) => [nearestStations[i], t]),
         );
 
       walkTimesCache.set(originCoords, map);
       setWalkTimes(map);
     })();
-  }, [nearestStops, position]);
+  }, [nearestStations, position]);
 
   return (
     <ErrorBoundary>
       {!position ? <p>Locating you</p> : ''}
-      {nearestStops.map(id => (
+      {nearestStations.map(id => (
         <Station key={id} id={id} walkTime={walkTimes.get(id)} />
       ))}
     </ErrorBoundary>
@@ -82,11 +85,16 @@ export function byDistance(position: Position | null) {
   ) {
     distanceCache = new Map();
     distanceCacheFor = position;
-    for (const [stopId, stop] of Object.entries(stopInfo)) {
+    for (const [stopId, stop] of Object.entries(stationInfo)) {
       distanceCache.set(
         stopId,
-        (stop.latitude - position.coords.latitude) ** 2 +
-          (stop.longitude - position.coords.longitude) ** 2,
+        Math.min(
+          ...stop.platforms.map(
+            p =>
+              (p.latitude - position.coords.latitude) ** 2 +
+              (p.longitude - position.coords.longitude) ** 2,
+          ),
+        ),
       );
     }
   }

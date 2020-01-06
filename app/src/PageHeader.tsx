@@ -8,25 +8,43 @@
 
 import React, { PropsWithChildren } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSync } from '@fortawesome/free-solid-svg-icons';
-import { RouteComponentProps } from '@reach/router';
+import { faSync, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { RouteComponentProps, Link } from '@reach/router';
 import { LoadingStatus } from './App';
 
 export function PageHeader({
   children,
   onRefresh,
   loadingStatus,
-}: PropsWithChildren<{ onRefresh: () => void; loadingStatus: LoadingStatus }>) {
+  showRefresh = true,
+  showBack = false,
+}: PropsWithChildren<{
+  onRefresh: () => void;
+  loadingStatus: LoadingStatus;
+  showRefresh?: boolean;
+  showBack?: boolean;
+}>) {
   return (
     <header className="row">
+      {showBack ? (
+        <Link to="/" className="plain" style={{ marginRight: 16 }}>
+          <FontAwesomeIcon icon={faArrowLeft} />
+        </Link>
+      ) : (
+        ''
+      )}
       {children}
       <span style={{ flex: 1 }}></span>
-      <button className="plain" onClick={onRefresh}>
-        <FontAwesomeIcon
-          spin={loadingStatus === LoadingStatus.LOADING}
-          icon={faSync}
-        />
-      </button>
+      {showRefresh ? (
+        <button className="plain" onClick={onRefresh}>
+          <FontAwesomeIcon
+            spin={loadingStatus === LoadingStatus.LOADING}
+            icon={faSync}
+          />
+        </button>
+      ) : (
+        ''
+      )}
     </header>
   );
 }
