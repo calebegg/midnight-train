@@ -9,7 +9,7 @@ set -e
 
 npm i
 
-rm -r data
+rm -rf data
 mkdir -p data
 wget -P data http://web.mta.info/developers/data/nyct/subway/google_transit.zip
 wget -P data http://web.mta.info/developers/data/nyct/subway/StationEntrances.csv
