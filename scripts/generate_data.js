@@ -57,8 +57,8 @@ for (const stop of stops) {
     latitude: +stop.stop_lat,
     longitude: +stop.stop_lon,
     borough: station['Borough'],
-    crossover: entrance ? entrance.Free_Crossover == 'TRUE' : false,
-    ada: entrance ? entrance.ADA == 'TRUE' : false,
+    crossover: entrance ? entrance.Free_Crossover === 'TRUE' : false,
+    ada: entrance ? entrance.ADA === 'TRUE' : false,
     headNorth: station['North Direction Label'] || 'Arrivals',
     headSouth: station['South Direction Label'] || 'Arrivals',
   };
