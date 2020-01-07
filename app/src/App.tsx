@@ -11,6 +11,7 @@ import {
   RouteComponentProps,
   Router,
   Link,
+  navigate,
 } from '@reach/router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ArrivalsResponse } from '../../common/types';
@@ -39,14 +40,35 @@ export function App() {
     LoadingStatus.LOADING,
   );
 
-  const [position, setPosition] = useState<Position | null>(null);
-
+  const [position, setPosition] = useState<Position | number | null>(null);
   useEffect(() => {
     if (loadingStatus !== LoadingStatus.LOADING) return;
-    navigator.geolocation.getCurrentPosition(l => {
-      setPosition(l);
-    });
+    navigator.geolocation.getCurrentPosition(
+      p => {
+        setPosition(p);
+      },
+      e => {
+        setPosition(e.code);
+      },
+    );
+    const watchId = navigator.geolocation.watchPosition(
+      p => {
+        setPosition(p);
+      },
+      e => {
+        setPosition(e.code);
+      },
+    );
+    return () => {
+      navigator.geolocation.clearWatch(watchId);
+    };
   }, [loadingStatus]);
+
+  useEffect(() => {
+    if (typeof position === 'number' && location.pathname === '/') {
+      navigate('/favorites');
+    }
+  }, [position]);
 
   const [data, setData] = useState<ArrivalsResponse | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);

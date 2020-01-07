@@ -18,9 +18,9 @@ const walkTimesCache = new Map<string, Map<string, number>>();
 
 export function Nearby({
   position,
-}: { position: Position | null } & RouteComponentProps) {
+}: { position: Position | number | null } & RouteComponentProps) {
   const nearestStations = useMemo(() => {
-    if (!position) return [];
+    if (!position || typeof position === 'number') return [];
     return Object.keys(stationInfo)
       .sort(byDistance(position))
       .slice(0, 5);
@@ -30,7 +30,7 @@ export function Nearby({
 
   useLayoutEffect(() => {
     (async () => {
-      if (!position) return;
+      if (!position || typeof position === 'number') return;
       if (nearestStations.length === 0) return;
 
       const originCoords = getCoordKey(position);
@@ -66,6 +66,14 @@ export function Nearby({
   return (
     <ErrorBoundary>
       {!position ? <p>Locating you</p> : ''}
+      {typeof position === 'number' ? (
+        <p>
+          This app doesn't have permission to view your location. To view nearby
+          stations, enable location access in your browser settings.
+        </p>
+      ) : (
+        ''
+      )}
       {nearestStations.map(id => (
         <Station key={id} id={id} walkTime={walkTimes.get(id)} />
       ))}
@@ -76,12 +84,11 @@ export function Nearby({
 let distanceCache: Map<string, number>;
 let distanceCacheFor: Position;
 
-export function byDistance(position: Position | null) {
+export function byDistance(position: Position) {
   if (
-    position &&
-    (!distanceCacheFor ||
-      position.coords.latitude !== distanceCacheFor.coords.latitude ||
-      position.coords.longitude !== distanceCacheFor.coords.longitude)
+    !distanceCacheFor ||
+    position.coords.latitude !== distanceCacheFor.coords.latitude ||
+    position.coords.longitude !== distanceCacheFor.coords.longitude
   ) {
     distanceCache = new Map();
     distanceCacheFor = position;

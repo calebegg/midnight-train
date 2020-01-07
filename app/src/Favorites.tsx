@@ -7,7 +7,7 @@
  */
 
 import { Link, RouteComponentProps } from '@reach/router';
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { FavoritesContext } from './context';
 import { ErrorBoundary } from './ErrorBoundary';
 import { byDistance } from './Nearby';
@@ -15,8 +15,15 @@ import { Station } from './Station';
 
 export function Favorites({
   position,
-}: { position: Position | null } & RouteComponentProps) {
+}: { position: Position | number | null } & RouteComponentProps) {
   const { favorites } = useContext(FavoritesContext);
+
+  const sortedFavorites = useMemo(() => {
+    if (!position || typeof position === 'number') {
+      return [...favorites];
+    }
+    return [...favorites].sort(byDistance(position)).slice(0, 5);
+  }, [position, favorites]);
 
   return (
     <ErrorBoundary>
@@ -28,7 +35,7 @@ export function Favorites({
       ) : (
         ''
       )}
-      {[...favorites].sort(byDistance(position)).map(id => (
+      {sortedFavorites.map(id => (
         <Station key={id} id={id} />
       ))}
     </ErrorBoundary>
