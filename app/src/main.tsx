@@ -9,6 +9,9 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { App } from './App';
+import { config } from '@fortawesome/fontawesome-svg-core';
+
+config.autoAddCss = false;
 
 navigator.serviceWorker.register('../service-worker.ts', { scope: '/' });
 

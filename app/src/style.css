@@ -6,6 +6,8 @@
  * found in the LICENSE file or at https://opensource.org/licenses/MIT.
  */
 
+@import '../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
+
 :root {
   /* https://www.colorbox.io/#steps=7#hue_start=229#hue_end=287#hue_curve=easeInQuad#sat_start=10#sat_end=30#sat_curve=easeOutQuad#sat_rate=100#lum_start=100#lum_end=25#lum_curve=easeInOutQuad#minor_steps_map=none */
   --color-0: #f2e6ff;
