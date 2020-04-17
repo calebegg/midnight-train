@@ -21,9 +21,7 @@ export function Nearby({
 }: { position: Position | number | null } & RouteComponentProps) {
   const nearestStations = useMemo(() => {
     if (!position || typeof position === 'number') return [];
-    return Object.keys(stationInfo)
-      .sort(byDistance(position))
-      .slice(0, 5);
+    return Object.keys(stationInfo).sort(byDistance(position)).slice(0, 5);
   }, [position]);
 
   const [walkTimes, setWalkTimes] = useState<Map<string, number>>(new Map());

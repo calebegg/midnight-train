@@ -21,8 +21,8 @@ export const walktimes = https.onRequest(async (req, res) => {
   const { json } = await client
     .distanceMatrix({
       mode: 'walking',
-      origins: [req.query['origin']],
-      destinations: req.query['destination'],
+      origins: [req.query['origin'] as string],
+      destinations: req.query['destination'] as string[],
     })
     .asPromise();
   res

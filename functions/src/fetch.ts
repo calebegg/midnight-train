@@ -21,16 +21,13 @@ export const fetch = pubsub.schedule('every 2 minutes').onRun(async () => {
     FEEDS.map(async ({ id: feedId }) => {
       try {
         const data = await request({
-          url: `http://datamine.mta.info/mta_esi.php?key=${API_KEY}&feed_id=${feedId}`,
+          url: `https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2F${feedId}`,
+          headers: { 'x-api-key': API_KEY },
           encoding: null,
         });
         // Make sure it parses before continuing
         FeedMessage.decode(data);
-        admin
-          .storage()
-          .bucket()
-          .file(`feed_${feedId}`)
-          .save(data);
+        admin.storage().bucket().file(`feed_${feedId}`).save(data);
       } catch (e) {
         console.warn('Request failed: ', e);
       }

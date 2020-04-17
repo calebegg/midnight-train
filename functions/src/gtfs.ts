@@ -14,16 +14,15 @@ import { transit_realtime } from '../generated/nyct';
 const { FeedMessage } = transit_realtime;
 
 const API_KEY = config().api_keys.gtfs_realtime;
-
 export const FEEDS = [
-  { id: '1', services: '123456S' },
-  { id: '26', services: 'ACEHS' },
-  { id: '16', services: 'NQRW' },
-  { id: '21', services: 'BDFM' },
-  { id: '2', services: 'L' },
-  { id: '31', services: 'G' },
-  { id: '36', services: 'JZ' },
-  { id: '51', services: '7' },
+  { id: 'gtfs', services: '123456' },
+  { id: 'gtfs-ace', services: 'ACE' },
+  { id: 'gtfs-nqrw', services: 'NQRW' },
+  { id: 'gtfs-bdfm', services: 'BDFM' },
+  { id: 'gtfs-l', services: 'L' },
+  { id: 'gtfs-g', services: 'G' },
+  { id: 'gtfs-jz', services: 'JZ' },
+  { id: 'gtfs-7', services: '7' },
 ];
 
 let feedCache: {
@@ -51,25 +50,22 @@ export async function fetchGtfs() {
         let value;
         try {
           const gtfs = await request({
-            url: `http://datamine.mta.info/mta_esi.php?key=${API_KEY}&feed_id=${feedId}`,
+            url: `https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2F${feedId}`,
+            headers: { 'x-api-key': API_KEY },
             encoding: null,
           });
           value = FeedMessage.decode(gtfs);
-        } catch {
+        } catch (e) {
+          console.warn('Fetch failed', e);
           try {
-            const file = admin
-              .storage()
-              .bucket()
-              .file(`feed_${feedId}`);
+            const file = admin.storage().bucket().file(`feed_${feedId}`);
             console.warn(
-              `Fetch failed, using cache updated ${
-                (await file.getMetadata())[0].updated
-              }`,
+              `Using cache updated ${(await file.getMetadata())[0].updated}`,
             );
             const gtfs = (await file.download())[0];
             value = FeedMessage.decode(gtfs);
           } catch (e) {
-            console.warn('Cache failed', e);
+            // console.warn('Cache failed', e);
             return { status: 'rejected', reason: new Error(services) };
           }
         }
